@@ -1,29 +1,28 @@
 function ticken() {
-    var Jahr, Monat, Tag;
-    var stunden, minuten, sekunden;
-    var StundenZahl, MinutenZahl, SekundenZahl;
+    var year, month, day;
+    var hour, minutes, seconds;
+    var stundenZahl, minutenZahl, sekundenZahl;
     var heute = new Date();
-    Jahr = heute.getFullYear();
-    Monat = heute.getMonth();
-    Tag = heute.getDate();
-    StundenZahl = heute.getHours();
-    MinutenZahl = heute.getMinutes();
-    SekundenZahl = heute.getSeconds();
-    stunden = StundenZahl + ":";
+    year = heute.getFullYear();
+    month = heute.getMonth();
+    day = heute.getDate();
+    stundenZahl = heute.getHours();
+    minutenZahl = heute.getMinutes();
+    sekundenZahl = heute.getSeconds();
+    hour = stundenZahl + ":";
 
-    if (MinutenZahl < 10)
-        minuten = "0" + MinutenZahl + ":";
+    if (minutenZahl < 10)
+        minutes = "0" + minutenZahl + ":";
     else
-        minuten = MinutenZahl + ":";
-    if (SekundenZahl < 10)
-        sekunden = "0" + SekundenZahl + " ";
+        minutes = minutenZahl + ":";
+    if (sekundenZahl < 10)
+        seconds = "0" + sekundenZahl + " ";
     else
-        sekunden = SekundenZahl + " ";
-    zeit = Tag + "/" + (Monat + 1) + "/" + Jahr + "|" + stunden + minuten + sekunden + " Uhr";
+        seconds = sekundenZahl + " ";
+    zeit = day + "/" + (month + 1) + "/" + year + "|" + hour + minutes + seconds;
     uhr.innerHTML = zeit;
     window.setTimeout("ticken();", 1000);
-}//End of ticken
+}
 window.onload = ticken;
-
 
 

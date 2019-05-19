@@ -3,7 +3,6 @@
 function databaseConnect($user, $pw, $databasetyp, $hostname, $databasename) {
     try {
         $dbh = new PDO("$databasetyp:host=$hostname;dbname=$databasename;charset=utf8", $user, $pw, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)); // DB-Aufbau objektorientiert
-//echo"<p class='center'>MySQL-Datenbank wurde soeben initialisiert...</p>";
     } catch (PDOException $e) {
         print "Error!: " . $e->getMessage() . "<br>";
         ?>

@@ -10,18 +10,26 @@
         <meta name="audience" content="alle">				<!-- definiert die Zielgruppe der Website  -->
         <meta name="page-topic" content="Hobby">		<!-- Zuordnungsdefinition für die Suchmaschine -->
         <meta name="revisit-after" CONTENT="7 days">			<!-- definiert den erneuten Besuch des Spiders//hier:nach sieben Tagen  -->
-        <title lang="de">Temperatur Analyse</title> 	<!-- weist dem HTML-Dokument in der Registerkarte einen Namen zu -->
-        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <title lang="de">Temperatur Analyse</title> 	<!-- weist dem HTML-Dokument in der Registerkarte einen Namen zu -->     
+        <!-- Online JQuery Bibliotheken. Werden zwar nicht benötigt, können aber auch nicht schaden... -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/menus.js"></script>
+        <script src="js/datetime.js"></script>      
         <link href="css/style.css" rel="stylesheet">
     </head>
 
     <body> <!-- Definition des Bodybereiches -->
+        <div class="mainDiv">
+            <div id="uhr" class="borderLeft"></div>
+        </div>
         <ul>
             <li class="dropdown">
                 <a href="javascript:void(0)" class="treffer_0" onclick="myFunction_0()">Home</a>
                 <div class="dropdown-inhalt_0" id="auswahl_0">
                     <a href="info.php">PHP-Info</a>
+                    <a href="javascript:impressum()">Impressum</a>
+
                 </div>
             </li>
             <li class="dropdown">
@@ -46,15 +54,32 @@
             }
         </script>
     <center><h2>Temperatur-Projekt</h2>
-        <p>Dieses Projekt liest die Temperaturdaten aus meiner Datenbank aus und stellt sie grafisch dar. Die Daten werden über Python und ein Shell-Script durch einen Temperatursensor auf meinem Pi erstellt</p></center>
+        <p>Dieses Projekt liest die Temperaturdaten aus meiner Datenbank aus und stellt sie grafisch dar. Die Daten werden über Python und ein Shell-Script durch einen Temperatursensor auf meinem Pi erstellt.</p></center>
     <?php
-    include_once 'inc/verbinden.php';
-    $user = 'tk'; 
-    $pw = '';
-    $databasetyp = "mysql";
-    $hostname = "192.168.1.10";
-    $databasename = 'temperatur';
-    $dc = databaseConnect($user, $pw, $databasetyp, $hostname, $databasename);
+    error_reporting(E_ALL ^ E_NOTICE);
+    spl_autoload_register('classAutoloader');
+    $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+    $connection = $DatabaseObject->Verbinden();
+    if (!$connection)
+        print_r("MySQL-Aufbau ist gescheitert!");
+    $sql = "SELECT count(id) FROM temperaturs";
+    $query1 = $DatabaseObject->Abfragen($connection, $sql);
     ?>
+    <center><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="dataAll.php" target="_blank">Meßdaten<span>Alle Records anzeigen</span></a> gefunden</center>
+    <div><label>Um die Werte anzuzeigen, bedienen Sie sich bitte der Menupunkte!</label></div>
 </body>
 </html>
+
+
+<?php
+
+function classAutoloader($class) {
+    $path = "$class.php";
+    if (file_exists($path)) {
+        require $path;
+    } else {
+        print_r("Klasse exisitert nicht");
+        die();
+    }
+}
+?>
