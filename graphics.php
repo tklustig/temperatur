@@ -29,12 +29,12 @@
                 <div class="dropdown-inhalt_0" id="auswahl_0">
                     <a href="info.php">PHP-Info</a>
                     <a href="javascript:impressum()">Impressum</a>
+                    <a href="index.php">Startseite</a>
                 </div>
             </li>
             <li class="dropdown">
                 <a href="javascript:void(0)" class="treffer_0" onclick="myFunction_1()">Daten abrufen</a>
                 <div class="dropdown-inhalt_0" id="auswahl_1">
-                    <a href="graphics.php">Grafik erstellen</a>
                     <a href="dataAll.php">alle Daten abrufen </a>
                     <a href="dataTime.php">bestimmte Daten abrufen </a>
                 </div>
@@ -53,32 +53,7 @@
             }
         </script>
     <center><h2>Temperatur-Projekt</h2>
-        <p>Dieses Projekt liest die Temperaturdaten aus meiner Datenbank aus und stellt sie grafisch dar. Die Daten werden über Python und ein Shell-Script durch einen Temperatursensor auf meinem Pi erstellt.</p></center>
-    <?php
-    error_reporting(E_ALL ^ E_NOTICE);
-    spl_autoload_register('classAutoloader');
-    $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
-    $connection = $DatabaseObject->Verbinden();
-    if (!$connection)
-        print_r("MySQL-Aufbau ist gescheitert!");
-    $sql = "SELECT count(id) FROM temperaturs";
-    $query1 = $DatabaseObject->Abfragen($connection, $sql);
-    ?>
-    <center><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="graphics.php">Meßdaten<span>Alle Records anzeigen</span></a> gefunden</center>
-    <div><label>Um die Werte anzuzeigen, bedienen Sie sich bitte der Menupunkte!</label></div>
+        <p>Graphische Darstellung der Temperatur-und Luftfeuchtigkeitswerte</p>
+        <img src="im_aktie.php" alt="not available">   </center>
 </body>
 </html>
-
-
-<?php
-
-function classAutoloader($class) {
-    $path = "$class.php";
-    if (file_exists($path)) {
-        require $path;
-    } else {
-        print_r("Klasse exisitert nicht");
-        die();
-    }
-}
-?>
