@@ -64,7 +64,7 @@
     $sql = "SELECT count(id) FROM temperaturs";
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
     ?>
-    <center><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="graphics.php">Meßdaten<span>Alle Records anzeigen</span></a> gefunden</center>
+    <center><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="graphics.php">Meßdaten<span>Records grafisch anzeigen</span></a> gefunden</center>
     <div><label>Um die Werte anzuzeigen, bedienen Sie sich bitte der Menupunkte!</label></div>
 </body>
 </html>

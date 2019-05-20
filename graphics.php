@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!Doctype html> <!-- Definition des doctype-Modus -->
 <html> <!-- Definition des Stammverzeichnises -->
     <head> <!-- Definition des Kopfbereiches -->
@@ -53,7 +56,30 @@
             }
         </script>
     <center><h2>Temperatur-Projekt</h2>
+        <?php
+        if (isset($_GET['query'])) {
+            if ($_GET['query'] == 1) {
+                if (!isset($_SESSION['pk']))
+                    $_SESSION['pk'] = 10000;
+                else
+                    $_SESSION['pk'] -= 500;
+            }else if ($_GET['query'] == 2) {
+                if (!isset($_SESSION['pk']))
+                    $_SESSION['pk'] = 10000;
+                else
+                    $_SESSION['pk'] += 500;
+            }else if ($_GET['query'] == 3)
+                if (!isset($_SESSION['pk']))
+                    $_SESSION['pk'] = 10000;
+                else
+                    $_SESSION['pk'] = random_int(100, 33000);
+        }
+        ?>
         <p>Graphische Darstellung der Temperatur-und Luftfeuchtigkeitswerte</p>
         <img src="im_aktie.php" alt="not available">   </center>
+    <center> <a href="?query=1">früher</a>
+        <a href="?query=2">später</a>
+        <a href="?query=3">zufällig</a>
+    </center>
 </body>
 </html>

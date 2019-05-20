@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 error_reporting(E_ALL ^ E_NOTICE);
 // Grafik erzeugen
 $im = imagecreate(400, 400);
@@ -21,7 +22,11 @@ $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatu
 $connection = $DatabaseObject->Verbinden();
 if (!$connection)
     print_r("MySQL-Aufbau ist gescheitert!");
-$sql = "SELECT id,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,datum,uhrzeit FROM temperaturs WHERE id>=4989 AND MOD(id,2)=1 ORDER BY id ASC LIMIT 12";
+if (isset($_SESSION['pk']))
+    $id = $_SESSION['pk'];
+else
+    $id = 100;
+$sql = "SELECT id,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,datum,uhrzeit FROM temperaturs WHERE id>=$id ORDER BY id ASC LIMIT 12";
 $query1 = $DatabaseObject->Abfragen($connection, $sql);
 $temperaturA = array();
 $uhrzeitA = array();
@@ -31,34 +36,18 @@ for ($i = 0; $i < count($query1); $i++) {
     $record = $query1[$i]['uhrzeit'];
     array_push($uhrzeitA, $record);
 }
-srand((double) microtime() * 1000000);
-
-/* $kurs[0] = 25;
-  for ($i = 1; $i < 36; $i++) {
-  $kurs[$i] = $kurs[$i - 1] + rand(-3, 3);
-  if ($kurs[$i] < 1)
-  $kurs[$i] = 1;
-  }
- */
 // Gitternetz, Beschriftung
 for ($i = 0; $i < count($uhrzeitA); $i++) {
-    $x = 30 + $i * 340 / count($uhrzeitA);
-    $y = max($temperaturA) - $i;
-    $z = 12 + $i * 340 / count($uhrzeitA);
-    imageline($im, 30, $x, 370, $x, $s);
-    imagettftext($im, 11, 0, 375, $x, $s, $schriftart, $y);
-    imageline($im, $x, 30, $x, 370, $s);
+    imageline($im, 30, 30 + $i * 340 / count($uhrzeitA), 370, 30 + $i * 340 / count($uhrzeitA), $s);
+    imagettftext($im, 11, 0, 375, 30 + $i * 340 / count($uhrzeitA), $s, $schriftart, max($temperaturA) - $i);
+    imageline($im, 30 + $i * 340 / count($uhrzeitA), 30, 30 + $i * 340 / count($uhrzeitA), 370, $s);
     $time = date("G:i", strtotime($uhrzeitA[$i]));
-    imagettftext($im, 11, 0, $z, 385, $s, $schriftart, $time);
+    imagettftext($im, 11, 0, 25 + $i * 340 / count($uhrzeitA), 380, $s, $schriftart, $time);
 }
 
-// Kurs darstellen
-for ($i = 1; $i < count($temperaturA)-1; $i++){
-    $x=$temperaturA[$i]+12;
-    $y=$temperaturA[$i]+12;
-    $z=$temperaturA[$i+1]+12+$i*30;
-    $xx=$temperaturA[($i+1)]+12;
-    imageline($im, $x, $y,$z,$xx, $r);
+// Temperatur darstellen:9,9,9,8,8,8,8,7,7,7,7,7
+for ($i = 0; $i < count($temperaturA) - 1; $i++) {
+    imageline($im, ($i + 1) * 300 / 10, 130 - $temperaturA[$i] * 130 / 50, ($i + 2) * 300 / 10, 130 - $temperaturA[$i + 1] * 130 / 50, $r);
 }
 // Grafik darstellen
 header("Content-Type: image/jpeg");
@@ -78,5 +67,4 @@ function classAutoloader($class) {
         die();
     }
 }
-
 ?>
