@@ -10,7 +10,7 @@ imagefill($im, 0, 0, $grau);
 $s = imagecolorallocate($im, 0, 0, 0);
 $r = imagecolorallocate($im, 255, 0, 0);
 $folder = getcwd();
-$schriftart = $folder . "/inc/coolvetica.ttf";
+$schriftart = $folder . "/inc/Free Hustle Hardcore.ttf";
 // Enddatum
 $ds = "28.02.2012";
 $datum = mktime(0, 0, 0, substr($ds, 3, 2), substr($ds, 0, 2), substr($ds, 6, 4));

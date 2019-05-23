@@ -21,8 +21,9 @@
 
     <body> <!-- Definition des Bodybereiches -->
         <div class="mainDiv">
-            <div id="uhr" class="borderLeft"></div>
+            <div id="uhr"></div>
         </div>
+        <img src="counter.php" title="Pic1" alt="Picture1">
         <ul>
             <li class="dropdown">
                 <a href="javascript:void(0)" class="treffer_0" onclick="myFunction_0()">Home</a>

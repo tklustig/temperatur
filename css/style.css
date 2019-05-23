@@ -234,13 +234,9 @@ a.tooltip:hover span{
     height: 20px;
     width: 125px;
     top:7%;
-    position: absolute;
-    background: #CEF6D8;
-    float:left;
-}
-.borderLeft {
     position: relative;
-    top: 10%;
+    background: #CEF6D8;
+    float:right;
 }
 
 
