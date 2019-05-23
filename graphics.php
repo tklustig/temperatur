@@ -62,12 +62,12 @@ session_start();
                 if (!isset($_SESSION['pk']))
                     $_SESSION['pk'] = 10000;
                 else
-                    $_SESSION['pk'] -= 500;
+                    $_SESSION['pk'] -= 2;
             }else if ($_GET['query'] == 2) {
                 if (!isset($_SESSION['pk']))
                     $_SESSION['pk'] = 10000;
                 else
-                    $_SESSION['pk'] += 500;
+                    $_SESSION['pk'] += 2;
             }else if ($_GET['query'] == 3)
                 if (!isset($_SESSION['pk']))
                     $_SESSION['pk'] = 10000;

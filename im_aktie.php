@@ -11,11 +11,6 @@ $s = imagecolorallocate($im, 0, 0, 0);
 $r = imagecolorallocate($im, 255, 0, 0);
 $folder = getcwd();
 $schriftart = $folder . "/inc/Free Hustle Hardcore.ttf";
-// Enddatum
-$ds = "28.02.2012";
-$datum = mktime(0, 0, 0, substr($ds, 3, 2), substr($ds, 0, 2), substr($ds, 6, 4));
-$datum = strtotime("-35 day", $datum);
-
 // Werte
 spl_autoload_register('classAutoloader');
 $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
@@ -45,7 +40,7 @@ for ($i = 0; $i < count($uhrzeitA); $i++) {
     imagettftext($im, 11, 0, 25 + $i * 340 / count($uhrzeitA), 380, $s, $schriftart, $time);
 }
 
-// Temperatur darstellen:9,9,9,8,8,8,8,7,7,7,7,7
+// Temperatur darstellen:11,11,11,12,12,12,12,12,12,13,13,13
 for ($i = 0; $i < count($temperaturA) - 1; $i++) {
     imageline($im, ($i + 1) * 300 / 10, 130 - $temperaturA[$i] * 130 / 50, ($i + 2) * 300 / 10, 130 - $temperaturA[$i + 1] * 130 / 50, $r);
 }

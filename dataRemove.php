@@ -30,6 +30,7 @@
                 <div class="dropdown-inhalt_0" id="auswahl_0">
                     <a href="info.php">PHP-Info</a>
                     <a href="javascript:impressum()">Impressum</a>
+                    <a href="index.php">Startseite</a>
                 </div>
             </li>
             <li class="dropdown">
@@ -48,13 +49,8 @@
                 </div>
             </li>
         </ul>
-        <script>
-            function impressum() {
-                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nKlein - Buchholzer - Kirchweg 25\n30659 Hannover\nMobil:0152/37389041");
-            }
-        </script>
     <center><h2>Temperatur-Projekt</h2>
-        <p>Dieses Projekt liest die Temperaturdaten aus meiner Datenbank aus und stellt sie grafisch dar. Die Daten werden über Python und ein Shell-Script durch einen Temperatursensor auf meinem Pi erstellt.</p></center>
+        <p>Diese Seite löscht alle doppelten Einträge in der Datenbank. Dazu betätigen Sie bitte den Submitbutton.</p></center>
     <?php
     include_once 'inc/autoloader.php';
     error_reporting(E_ALL ^ E_NOTICE);
@@ -63,10 +59,48 @@
     $connection = $DatabaseObject->Verbinden();
     if (!$connection)
         print_r("MySQL-Aufbau ist gescheitert!");
-    $sql = "SELECT count(id) FROM temperaturs";
+    $sql = "SELECT id,uhrzeit FROM temperaturs WHERE id>48284;";
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
+    for ($i = 0; $i < count($query1); $i++) {
+        if ($query1[$i]['uhrzeit'] == $query1[$i + 1]['uhrzeit']) {
+            $StartIdForDeleting = $query1[$i]['id'];
+            break;
+        }
+    }
     ?>
-    <center><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="graphics.php">Meßdaten<span>Records grafisch anzeigen</span></a> gefunden</center>
-    <div><label>Um die Werte anzuzeigen, bedienen Sie sich bitte der Menupunkte!</label></div>
-</body>
-</html>
+    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+        <center><p class="pSpecial">StartId: <?php if (!empty($StartIdForDeleting))
+        echo $StartIdForDeleting;
+    else
+        echo "Unknown";
+    ?> </p>
+            <input class="button2" type="submit" name="submit0" value="Submit">
+        </center>
+    </form>
+        <?php
+        if (empty($StartIdForDeleting) || $StartIdForDeleting == null) {
+            ?> 
+        <center><p>Es wurden keine doppelten Einträge gefunden.</p>
+            <?php
+        }
+        if (!empty($_REQUEST['submit0'])) {
+            if (!empty($StartIdForDeleting) && $StartIdForDeleting != null) {
+                $sql = "DELETE FROM temperaturs WHERE MOD(id,2)=1 AND id>=$StartIdForDeleting;";
+                $query1 = $DatabaseObject->Abfragen($connection, $sql);
+                if (!is_array($query1) && $query1) {
+                    ?> 
+                    <center><p class="pSpecial">Alle doppelten Einträge ab Id: <?= $StartIdForDeleting ?> wurden aus der Datenbank entfernt!</p>
+                        <?php
+                    }
+                } else {
+                    ?>
+                    <center><p class="pSpecial">Da keine doppelten Einträge gefunden wurden, bleibt der Request wirkungslos.</p>  
+                        <?php
+                    }
+                }
+                ?>
+                </body>
+                </html>
+
+
+
