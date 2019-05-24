@@ -37,7 +37,7 @@ class MySQLClass {
             return $connection;
         } catch (PDOException $e) {
             print_r("Error!: " . $e->getMessage() . "<br>");
-            die();
+            return false;
         }
     }
 

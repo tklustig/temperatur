@@ -61,8 +61,10 @@
     spl_autoload_register('classAutoloader');
     $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
     $connection = $DatabaseObject->Verbinden();
-    if (!$connection)
-        print_r("MySQL-Aufbau ist gescheitert!");
+    if (!$connection) {
+        print_r("MySQL-Aufbau ist gescheitert!<br>");
+        die();
+    }
     $sql = "SELECT count(id) FROM temperaturs";
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
     ?>

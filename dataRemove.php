@@ -49,6 +49,11 @@
                 </div>
             </li>
         </ul>
+        <script>
+            function impressum() {
+                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nKlein - Buchholzer - Kirchweg 25\n30659 Hannover\nMobil:0152/37389041");
+            }
+        </script>
     <center><h2>Temperatur-Projekt</h2>
         <p>Diese Seite löscht alle doppelten Einträge in der Datenbank. Dazu betätigen Sie bitte den Submitbutton.</p></center>
     <?php
@@ -57,8 +62,10 @@
     spl_autoload_register('classAutoloader');
     $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
     $connection = $DatabaseObject->Verbinden();
-    if (!$connection)
-        print_r("MySQL-Aufbau ist gescheitert!");
+    if (!$connection) {
+        print_r("MySQL-Aufbau ist gescheitert!<br>");
+        die();
+    }
     $sql = "SELECT id,uhrzeit FROM temperaturs WHERE id>48284;";
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
     for ($i = 0; $i < count($query1); $i++) {
@@ -69,17 +76,18 @@
     }
     ?>
     <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-        <center><p class="pSpecial">StartId: <?php if (!empty($StartIdForDeleting))
-        echo $StartIdForDeleting;
-    else
-        echo "Unknown";
-    ?> </p>
+        <center><p class="pSpecial">StartId: <?php
+                if (!empty($StartIdForDeleting))
+                    echo $StartIdForDeleting;
+                else
+                    echo "Unknown";
+                ?> </p>
             <input class="button2" type="submit" name="submit0" value="Submit">
         </center>
     </form>
-        <?php
-        if (empty($StartIdForDeleting) || $StartIdForDeleting == null) {
-            ?> 
+    <?php
+    if (empty($StartIdForDeleting) || $StartIdForDeleting == null) {
+        ?> 
         <center><p>Es wurden keine doppelten Einträge gefunden.</p>
             <?php
         }
