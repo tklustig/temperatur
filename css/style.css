@@ -195,8 +195,8 @@ body{background-color:#ECF6CE;}
 
 label{
     font-family: Arial,sans-serif; 
-    font-size:20px;
-    color:green;
+    font-size:12px;
+    color:#610B21;
 }
 
 p{
@@ -207,6 +207,17 @@ p{
 .pSpecial{
     font-family: Arial,sans-serif;
     font-size:18px;
+    color:red;
+}
+.pAlert{
+    font-family:verdana,arial;
+    font-size:80%;
+    color:black;
+}
+.pTitle{
+    font-family:verdana,arial;
+    font-size:80%;
+    text-align:center;
     color:red;
 }
 a{

@@ -18,8 +18,10 @@ session_start();
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/menus.js"></script>
-        <script src="js/datetime.js"></script>      
+        <script src="js/datetime.js"></script> 
+        <script src="js/Alert.js"></script>
         <link href="css/style.css" rel="stylesheet">
+        <style type="text/css">p{font-family:verdana,arial;font-size:80%}</style>
     </head>
 
     <body> <!-- Definition des Bodybereiches -->
@@ -59,27 +61,48 @@ session_start();
         <?php
         if (isset($_GET['query'])) {
             if ($_GET['query'] == 1) {
-                if (!isset($_SESSION['pk']))
-                    $_SESSION['pk'] = 10000;
-                else
-                    $_SESSION['pk'] -= 2;
-            }else if ($_GET['query'] == 2) {
-                if (!isset($_SESSION['pk']))
-                    $_SESSION['pk'] = 10000;
-                else
-                    $_SESSION['pk'] += 2;
-            }else if ($_GET['query'] == 3)
-                if (!isset($_SESSION['pk']))
-                    $_SESSION['pk'] = 10000;
-                else
-                    $_SESSION['pk'] = random_int(100, 33000);
+                $_SESSION['pk'] -= 2;
+            } else if ($_GET['query'] == 2) {
+                $_SESSION['pk'] += 2;
+            } else if ($_GET['query'] == 3)
+                $_SESSION['pk'] = random_int(100, 33000);
+        }
+        if (isset($_SESSION['pk']) && $_SESSION['pk'] < 0) {
+            ?>
+            <script>
+                alertWidth = 300;
+                alertHeight = 200;
+                xAlertStart = 650;
+                yAlertStart = 200;
+                alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                alertText = "<p class='pAlert'>Sie befinden sich am unteren Ende der Meßwerte. Bitte erhöhen, anstatt reduzieren!</p>";
+                showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                // alert("Sie befinden sich am unteren Ende der Meßwerte. Bitte erhöhen, anstatt reduzieren!");
+            </script>
+            <?php
+            $_SESSION['pk'] = 1;
         }
         ?>
-        <p>Graphische Darstellung der Temperatur-und Luftfeuchtigkeitswerte</p>
-        <img src="im_aktie.php" alt="not available">   </center>
-    <center> <a href="?query=1">früher</a>
-        <a href="?query=2">später</a>
-        <a href="?query=3">zufällig</a>
+        <div>
+            <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                <p>Graphische Darstellung der Temperatur-und Luftfeuchtigkeitswerte</p>
+                <img src="createGraphics.php" alt="not available">  
+                <center>
+                    <a href="?query=1">früher</a>
+                    <a href="?query=2">später</a>
+                    <a href="?query=3">zufällig</a>
+                    <div><br>
+                        <label>Id zurück setzen</label>
+                        <input class="button3" type="submit" name="submit0" value="Submit">
+                    </div>                  
+                </center>
+            </form>
+        </div>
     </center>
 </body>
 </html>
+<?php
+if (!empty($_REQUEST['submit0'])) {
+    $_SESSION['pk'] = 1;
+}
+?>
