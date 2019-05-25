@@ -57,8 +57,8 @@
     <center><h2>Temperatur-Projekt</h2>
         <p>Diese Seite löscht alle doppelten Einträge in der Datenbank. Dazu betätigen Sie bitte den Submitbutton.</p></center>
     <?php
-    include_once 'inc/autoloader.php';
     error_reporting(E_ALL ^ E_NOTICE);
+    include_once 'inc/autoloader.php';
     spl_autoload_register('classAutoloader');
     $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
     $connection = $DatabaseObject->Verbinden();
@@ -76,7 +76,7 @@
     }
     ?>
     <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-        <center><p class="pSpecial">StartId: <?php
+        <center><p class="pSpecial">Start-Id: <?php
                 if (!empty($StartIdForDeleting))
                     echo $StartIdForDeleting;
                 else
@@ -99,6 +99,9 @@
                     ?> 
                     <center><p class="pSpecial">Alle doppelten Einträge ab Id: <?= $StartIdForDeleting ?> wurden aus der Datenbank entfernt!</p>
                         <?php
+                    } else {
+                        print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                        die();
                     }
                 } else {
                     ?>

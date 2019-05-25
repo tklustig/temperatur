@@ -57,42 +57,59 @@ session_start();
                 alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nKlein - Buchholzer - Kirchweg 25\n30659 Hannover\nMobil:0152/37389041");
             }
         </script>
-    <center><h2>Temperatur-Projekt</h2>
+    <center><h1>Temperatur-Projekt</h1>
+        <p class="pSpecialo">Graphische Darstellung der Temperatur-und Luftfeuchtigkeitswerte</p>
         <?php
         if (isset($_GET['query'])) {
             if ($_GET['query'] == 1) {
                 $_SESSION['pk'] -= 2;
             } else if ($_GET['query'] == 2) {
                 $_SESSION['pk'] += 2;
-            } else if ($_GET['query'] == 3)
-                $_SESSION['pk'] = random_int(100, 33000);
+            } else if ($_GET['query'] == 3) {
+                include_once 'inc/autoloader.php';
+                spl_autoload_register('classAutoloader');
+                $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+                $connection = $DatabaseObject->Verbinden();
+                if (!$connection) {
+                    print_r("MySQL-Aufbau ist gescheitert!<br>");
+                    die();
+                }
+                $sql = "SELECT max(id) AS max,min(id) AS min FROM temperaturs;";
+                $query1 = $DatabaseObject->Abfragen($connection, $sql);
+                if (is_array($query1)) {
+                    $valueMax = $query1[0]['max'];
+                    $valueMin = $query1[0]['min'];
+                } else {
+                    print_r("Fehler bei der Datenbankabfrage!");
+                    die();
+                }
+                $_SESSION['pk'] = random_int($valueMin, $valueMax);
+            }
         }
         if (isset($_SESSION['pk']) && $_SESSION['pk'] < 0) {
             ?>
             <script>
-                alertWidth = 300;
+                alertWidth = 250;
                 alertHeight = 200;
                 xAlertStart = 650;
                 yAlertStart = 200;
                 alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
                 alertText = "<p class='pAlert'>Sie befinden sich am unteren Ende der Meßwerte. Bitte erhöhen, anstatt reduzieren!</p>";
                 showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
-                // alert("Sie befinden sich am unteren Ende der Meßwerte. Bitte erhöhen, anstatt reduzieren!");
             </script>
             <?php
             $_SESSION['pk'] = 1;
         }
         ?>
-        <div>
+        <div>          
             <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-                <p>Graphische Darstellung der Temperatur-und Luftfeuchtigkeitswerte</p>
                 <img src="createGraphics.php" alt="not available">  
                 <center>
                     <a href="?query=1">früher</a>
                     <a href="?query=2">später</a>
                     <a href="?query=3">zufällig</a>
                     <div><br>
-                        <label>Id zurück setzen</label>
+                        <label>Id zurücksetzen</label>
                         <input class="button3" type="submit" name="submit0" value="Submit">
                     </div>                  
                 </center>

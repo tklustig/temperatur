@@ -8,18 +8,7 @@ class MySQLClass {
     private $host;
     private $databaseName;
 
-    //Konstruktor
-
-    public function classAutoloader($class) {
-        $path = "$class.php";
-        if (file_exists($path)) {
-            require $path;
-        } else {
-            print_r("Klasse exisitert nicht");
-            die();
-        }
-    }
-
+    //Konstruktor der Klasse MySQLClass
     public function __construct($user, $password, $databaseTyp, $host, $name) {
         $this->user = $user;
         $this->password = $password;
@@ -28,30 +17,35 @@ class MySQLClass {
         $this->databaseName = $name;
     }
 
+    // DB-Aufbau über die PDO-Klasse
     public function Verbinden() {
         try {
-            // DB-Aufbau über die PDO-Klasse
             $connection = new PDO("$this->databaseTyp:host=$this->host;dbname=$this->databaseName;charset=utf8", $this->user, $this->password);
             $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $connection;
         } catch (PDOException $e) {
-            print_r("Error!: " . $e->getMessage() . "<br>");
+            print_r('!!Error!!<br>Fehlercode:' . $e->getCode() . '<br>Fehlerart: ' . $e->getMessage() . '<br>in Zeile: ' . $e->getLine() . '<br>in Datei: ' . $e->getFile());
             return false;
         }
     }
 
     public function Abfragen($connection, $sql) {
-        $pConn = $connection->prepare($sql);
-        $GiveBackBoolean = $pConn->execute();
-        $result = array();
-        while ($row = $pConn->fetch(PDO::FETCH_ASSOC)) {
-            array_push($result, $row);
+        try {
+            $pConn = $connection->prepare($sql);
+            $GiveBackBoolean = $pConn->execute();
+            $result = array();
+            while ($row = $pConn->fetch(PDO::FETCH_ASSOC)) {
+                array_push($result, $row);
+            }
+            if (!empty($result) && is_array($result))
+                return $result;
+            else
+                return $GiveBackBoolean;
+        } catch (PDOException $e) {
+            print_r('!!Error!!<br>Fehlercode:' . $e->getCode() . '<br>Fehlerart: ' . $e->getMessage() . '<br>in Zeile: ' . $e->getLine() . '<br>in Datei: ' . $e->getFile());
+            return null;
         }
-        if (!empty($result) && is_array($result))
-            return $result;
-        else
-            return $GiveBackBoolean;
     }
 
     public function lastInsertedPK($connection) {

@@ -2,7 +2,7 @@
 
 session_start();
 error_reporting(E_ALL ^ E_NOTICE);
-// Werte
+ include_once 'inc/autoloader.php';
 spl_autoload_register('classAutoloader');
 $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
 $connection = $DatabaseObject->Verbinden();
@@ -98,17 +98,4 @@ header("Content-Type: image/jpeg");
 imagejpeg($im);
 // Speicher freigeben
 imagedestroy($im);
-?>
-<?php
-
-function classAutoloader($class) {
-    $path = "$class.php";
-    if (file_exists($path)) {
-        require $path;
-    } else {
-        print_r("Klasse exisitert nicht");
-        die();
-    }
-}
-
 ?>

@@ -1,10 +1,8 @@
 <?php
 
 session_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-// Werte
+error_reporting(E_ALL ^ E_NOTICE);
+//Damit die Bilderzeugung funktioniert, darf keine PHP Datei eingebunden werden. Deshalb muss der Autoloader aus dem Script geladen werden
 spl_autoload_register('classAutoloader');
 $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
 $connection = $DatabaseObject->Verbinden();
@@ -78,6 +76,7 @@ $graph->ynaxis[0]->SetColor('red');
 // Output line
 $graph->Stroke();
 
+//Kann nicht ausgelagert werden(s.o.)
 function classAutoloader($class) {
     $path = "$class.php";
     if (file_exists($path)) {
