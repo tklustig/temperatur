@@ -56,8 +56,7 @@
     <center><h2>Temperatur-Projekt</h2>
         <p>Dieses Projekt liest die Temperaturdaten aus meiner Datenbank aus und stellt sie grafisch dar. Die Daten werden über Python und ein Shell-Script durch einen Temperatursensor auf meinem Pi erstellt.</p></center>
     <?php
-    include_once 'inc/autoloader.php';
-    error_reporting(E_ALL ^ E_NOTICE);
+    require_once 'inc/autoloader.php';
     spl_autoload_register('classAutoloader');
     $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
     $connection = $DatabaseObject->Verbinden();
@@ -68,7 +67,7 @@
     $sql = "SELECT count(id) FROM temperaturs";
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
     ?>
-    <center><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="graphics.php">Meßdaten<span>Records grafisch anzeigen</span></a> gefunden</center>
-    <div><label>Um die Werte anzuzeigen, bedienen Sie sich bitte der Menupunkte!</label></div>
+    <center><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="graphics.php">Meßdaten<span>Records grafisch anzeigen</span></a> gefunden
+    <div><label>Um die Werte anzuzeigen, bedienen Sie sich bitte der Menupunkte!</label></div></center>
 </body>
 </html>

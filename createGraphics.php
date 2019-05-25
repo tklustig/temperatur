@@ -1,8 +1,9 @@
 <?php
 
 session_start();
-error_reporting(E_ALL ^ E_NOTICE);
-//Damit die Bilderzeugung funktioniert, darf keine PHP Datei eingebunden werden. Deshalb muss der Autoloader aus dem Script geladen werden
+/* Damit die Bilderzeugung funktioniert, darf keine PHP Datei eingebunden werden. Deshalb muss der Autoloader aus dem Script geladen werden.
+  Auch die Errormeldungen können nicht eingebunden werden, sondern müssen an Ort und Stelle codiert werden.
+ */
 spl_autoload_register('classAutoloader');
 $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
 $connection = $DatabaseObject->Verbinden();

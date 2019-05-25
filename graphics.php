@@ -66,7 +66,7 @@ session_start();
             } else if ($_GET['query'] == 2) {
                 $_SESSION['pk'] += 2;
             } else if ($_GET['query'] == 3) {
-                include_once 'inc/autoloader.php';
+                require_once 'inc/autoloader.php';
                 spl_autoload_register('classAutoloader');
                 $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
                 $connection = $DatabaseObject->Verbinden();
