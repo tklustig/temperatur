@@ -1,7 +1,7 @@
 <?php
 
 function classAutoloader($class) {
-    $path = "$class.php";
+    $path = "inc/$class.php";
     if (file_exists($path)) {
         require $path;
     } else {
