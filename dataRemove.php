@@ -57,7 +57,6 @@
     <center><h2>Temperatur-Projekt</h2>
         <p>Diese Seite löscht alle doppelten Einträge in der Datenbank. Dazu betätigen Sie bitte den Submitbutton.</p></center>
     <?php
-    require_once 'inc/errorReporting.php';
     require_once 'inc/autoloader.php';
     spl_autoload_register('classAutoloader');
     $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
