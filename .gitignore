@@ -1,2 +1,2 @@
-js/
-nbproject/
+nbproject/**/* 
+nbproject/private/* 
