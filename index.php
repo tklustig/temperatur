@@ -53,8 +53,29 @@
                 alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nKlein - Buchholzer - Kirchweg 25\n30659 Hannover\nMobil:0152/37389041");
             }
         </script>
+        <audio id="sound" controls src="https://wiki.selfhtml.org/local/Europahymne.mp3" type="audio/mp3"></audio> 
     <center><h2>Temperatur-Projekt</h2>
-        <p>Dieses Projekt liest die Temperaturdaten aus meiner Datenbank aus und stellt sie grafisch dar. Die Daten werden über Python und ein Shell-Script durch einen Temperatursensor auf meinem Pi erstellt.</p></center>
+        <div id="pic1"></div>
+        <div id="pic2"></div>
+        <script>
+            var breiteCheck = screen.width >= 1680 ? true : false;
+            var hoeheCheck = screen.height >= 1050 ? true : false;
+            if (hoeheCheck && breiteCheck) {
+                var Bild = new Array();
+                Bild[0] = "<img id=\"bild1\" src=\"img/home.jpg\" alt=\"Picture1 not available\">";
+                Bild[1] = "<img id=\"bild2\" src=\"img/home.jpg\" alt=\"Pictures2 not available\">";
+                document.getElementById("pic1").innerHTML = Bild[0];
+                document.getElementById("pic2").innerHTML = Bild[1];
+            }
+        </script>
+        <p>Dieses Projekt liest die Temperaturdaten aus meiner Datenbank aus und stellt sie grafisch dar. Sie werden folgendermaßen erstellt</p>    
+        <ol>
+            <li id="abc">C-Programme(Sourcecode) bilden den Treiber für einen Temperatursensor auf meinem Pi bzgl. Grad(in Celsius) und Luftfeuchtigkeit(in Prozent) meiner Wohnung.</li><br>
+            <li>    Ein Shell Script ruft ein Python-Programm auf, welches über die importierte Python-Library(Adafruit), die den C-Treiber nutzt, die Werte ausliest.</li><br>
+            <li>Das Shell-Script, welches über einen CronJob alle 30 Minuten aufgerufen wird, schreibt daraufhin die über Python ermittelten Werte in eine MySQL Datenbank.</li>
+            <li>Da der CronJob doppelt aufgerufen wird, sollten die Werte über den Adminberich bereinigt werden!</li>
+        </ol>
+    </center>
     <?php
     require_once 'inc/autoloader.php';
     spl_autoload_register('classAutoloader');
@@ -67,7 +88,8 @@
     $sql = "SELECT count(id) FROM temperaturs";
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
     ?>
-    <center><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="graphics.php">Meßdaten<span>Records grafisch anzeigen</span></a> gefunden
-    <div><label>Um die Werte anzuzeigen, bedienen Sie sich bitte der Menupunkte!</label></div></center>
+    <div><center>
+            <br><br><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="graphics.php">Meßdaten<span>Records grafisch anzeigen</span></a> gefunden
+                <label>Um die Werte anzuzeigen, bedienen Sie sich bitte der Menupunkte!</label></center></div>
 </body>
 </html>

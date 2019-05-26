@@ -10,6 +10,7 @@ ul {
 
 li {
     float: left;
+
 }
 
 li a, .dropbtn {
@@ -48,14 +49,6 @@ li.dropdown {
 .dropdown-inhalt_0 a:hover {background-color: #2E9AFE;} /* definiert die Farbe der Submenuauswahl */
 
 .zeigen {display:block;}  /*definiert das Ende der Menustrukturierung */
-
-.img1
-{
-    width:180px;
-    height:180px;
-    padding:3px;
-    float:right;
-}
 
 .button1 {
     display: inline-block;
@@ -254,7 +247,23 @@ a.tooltip:hover span{
     background: #CEF6D8;
     float:right;
 }
+#sound{
+    float:right;
+}
 
-
-
-
+#bild1
+{
+    width:180px;
+    height:180px;
+    float:right;
+}
+#bild2
+{
+    width:180px;
+    height:180px;
+    float:right;
+    top:40%;
+    right:85%;
+    position: absolute;
+        
+}
