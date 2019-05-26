@@ -36,7 +36,7 @@
             <li class="dropdown">
                 <a href="javascript:void(0)" class="treffer_0" onclick="myFunction_1()">Daten abrufen</a>
                 <div class="dropdown-inhalt_0" id="auswahl_1">
-                    <a href="graphics.php">Grafik erstellen</a>
+                    <a href="showGraphics.php">Grafik erstellen</a>
                     <a href="dataAll.php">alle Daten abrufen </a>
                     <a href="dataTime.php">bestimmte Daten abrufen </a>
                 </div>
@@ -45,7 +45,6 @@
                 <a href="javascript:void(0)" class="treffer_0" onclick="myFunction_2()">Adminbereich</a>
                 <div class="dropdown-inhalt_0" id="auswahl_2">
                     <a href="dataDelete.php">Daten löschen</a>
-                    <a href="dataRemove.php">Duplikate entfernen</a>
                 </div>
             </li>
         </ul>

@@ -35,7 +35,7 @@
             <li class="dropdown">
                 <a href="javascript:void(0)" class="treffer_0" onclick="myFunction_1()">Daten abrufen</a>
                 <div class="dropdown-inhalt_0" id="auswahl_1">
-                    <a href="graphics.php">Grafik erstellen</a>
+                    <a href="showGraphics.php">Grafik erstellen</a>
                     <a href="dataAll.php">alle Daten abrufen </a>
                     <a href="dataTime.php">bestimmte Daten abrufen </a>
                 </div>
@@ -89,7 +89,7 @@
         $query1 = $DatabaseObject->Abfragen($connection, $sql);
         ?>
         <div>
-            <br><br><br><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="graphics.php">Meßdaten<span>Records grafisch anzeigen</span></a> gefunden
+            <br><br><br><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="showGraphics.php">Meßdaten<span>Records grafisch anzeigen</span></a> gefunden
         </div></center>
 </body>
 </html>
