@@ -14,17 +14,33 @@ session_start();
         <meta name="page-topic" content="Hobby">		<!-- Zuordnungsdefinition für die Suchmaschine -->
         <meta name="revisit-after" CONTENT="7 days">			<!-- definiert den erneuten Besuch des Spiders//hier:nach sieben Tagen  -->
         <title lang="de">Temperatur Analyse</title> 	<!-- weist dem HTML-Dokument in der Registerkarte einen Namen zu -->     
-        <!-- Online JQuery Bibliotheken. Werden zwar nicht benötigt, können aber auch nicht schaden... -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.js" type="text/javascript" charset="utf-8"></script>
+        <!--  JQuery Bibliotheken -->
+        <script src="js/jquery-1.7.1.min.js"></script>
+        <script src="js/jquery-ui-1.8.17.custom.min.js"></script>
         <script src="js/menus.js"></script>
         <script src="js/datetime.js"></script> 
         <script src="js/Alert.js"></script>
+        <!--  CSS Bibliotheken -->
         <link href="css/style.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/jquery-ui-1.8.17.custom.css">
         <style type="text/css">p{font-family:verdana,arial;font-size:80%}</style>
     </head>
 
     <body> <!-- Definition des Bodybereiches -->
+        <script>
+            $(document).ready(function () {
+                $('#date').datepicker({
+                    showOn: 'button',
+                    buttonImage: 'calendar.png',
+                    buttonImageOnly: true,
+                    numberOfMonths: 2,
+                    showButtonPanel: true,
+                    autoSize: true,
+                    monthNames: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+                    dateFormat: 'dd-mm-yy'
+                });
+            });
+        </script>
         <div class="mainDiv">
             <div id="uhr" class="borderLeft"></div>
         </div>
@@ -59,67 +75,89 @@ session_start();
         </script>
     <center><h1>Temperatur-Projekt</h1>
         <p class="pSpecialo">Graphische Darstellung der Temperatur-und Luftfeuchtigkeitswerte</p>
-        <?php
-        if (isset($_GET['query'])) {
-            if ($_GET['query'] == 1) {
-                $_SESSION['pk'] -= 2;
-            } else if ($_GET['query'] == 2) {
-                $_SESSION['pk'] += 2;
-            } else if ($_GET['query'] == 3) {
-                require_once 'inc/autoloader.php';
-                spl_autoload_register('classAutoloader');
-                $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
-                $connection = $DatabaseObject->Verbinden();
-                if (!$connection) {
-                    print_r("MySQL-Aufbau ist gescheitert!<br>");
-                    die();
-                }
-                $sql = "SELECT max(id) AS max,min(id) AS min FROM temperaturs;";
-                $query1 = $DatabaseObject->Abfragen($connection, $sql);
-                if (is_array($query1)) {
-                    $valueMax = $query1[0]['max'];
-                    $valueMin = $query1[0]['min'];
-                } else {
-                    print_r("Fehler bei der Datenbankabfrage!");
-                    die();
-                }
-                $_SESSION['pk'] = random_int($valueMin, $valueMax);
-            }
-        }
-        if (isset($_SESSION['pk']) && $_SESSION['pk'] < 0) {
-            ?>
-            <script>
-                alertWidth = 250;
-                alertHeight = 200;
-                xAlertStart = 650;
-                yAlertStart = 200;
-                alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                alertText = "<p class='pAlert'>Sie befinden sich am unteren Ende der Meßwerte. Bitte erhöhen, anstatt reduzieren!</p>";
-                showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
-            </script>
-            <?php
-            $_SESSION['pk'] = 1;
-        }
-        ?>
-        <div>          
-            <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-                <img src="createGraphics.php" alt="not available">  
-                <center>
-                    <a href="?query=1">früher</a>
-                    <a href="?query=2">später</a>
-                    <a href="?query=3">zufällig</a>
-                    <div><br>
-                        <label>Id zurücksetzen</label>
-                        <input class="button3" type="submit" name="submit0" value="Submit">
-                    </div>                  
-                </center>
-            </form>
-        </div>
     </center>
+    <?php
+    if (isset($_GET['query'])) {
+        if ($_GET['query'] == 1) {
+            $_SESSION['pk'] -= 2;
+        } else if ($_GET['query'] == 2) {
+            $_SESSION['pk'] += 2;
+        } else if ($_GET['query'] == 3) {
+            require_once 'inc/autoloader.php';
+            spl_autoload_register('classAutoloader');
+            $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+            $connection = $DatabaseObject->Verbinden();
+            if (!$connection) {
+                print_r("MySQL-Aufbau ist gescheitert!<br>");
+                die();
+            }
+            $sql = "SELECT max(id) AS max,min(id) AS min FROM temperaturs;";
+            $query1 = $DatabaseObject->Abfragen($connection, $sql);
+            if (is_array($query1)) {
+                $valueMax = $query1[0]['max'];
+                $valueMin = $query1[0]['min'];
+            } else {
+                print_r("Fehler bei der Datenbankabfrage!");
+                die();
+            }
+            $_SESSION['pk'] = random_int($valueMin, $valueMax);
+        }
+    }
+    if (isset($_SESSION['pk']) && $_SESSION['pk'] < 0) {
+        ?>
+        <script>
+            alertWidth = 250;
+            alertHeight = 200;
+            xAlertStart = 650;
+            yAlertStart = 200;
+            alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+            alertText = "<p class='pAlert'>Sie befinden sich am unteren Ende der Meßwerte. Bitte erhöhen, anstatt reduzieren!</p>";
+            showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+        </script>
+        <?php
+        $_SESSION['pk'] = 1;
+    }
+    ?>
+    <div>
+        <center>
+            <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                <div>
+                    <input class="feld" type=text name="anfang0" id="date" placeholder=" Datum:">
+                </div>
+                <br>
+                <img src="createGraphics.php" alt="not available">  
+                <br>
+                <a href="?query=1">früher</a>
+                <a href="?query=2">später</a>
+                <a href="?query=3">zufällig</a> 
+                <div>
+                    <br>
+                    <label>Id zurücksetzen</label>
+                    <input class="button3" type="submit" name="submit0" value="Submit">
+                </div>
+                <div>
+                    <br>
+                    <label>Datum anzeigen</label>
+                    <input class="button3" type="submit" name="submit1" value="Submit">
+                </div>
+            </form>
+        </center>
+    </div>
 </body>
 </html>
 <?php
 if (!empty($_REQUEST['submit0'])) {
     $_SESSION['pk'] = 1;
+    ?>
+    <script>
+        alertWidth = 300;
+        alertHeight = 150;
+        xAlertStart = 650;
+        yAlertStart = 200;
+        alertTitle = "<p class='pTitle'><b>! Information !</b></p>";
+        alertText = "<p class='pAlert'>Sie befinden sich jetzt am unteren Ende der Meßwerte!</p>";
+        showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+    </script>
+    <?php
 }
 ?>
