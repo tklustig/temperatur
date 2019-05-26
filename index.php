@@ -61,35 +61,35 @@
             var breiteCheck = screen.width >= 1680 ? true : false;
             var hoeheCheck = screen.height >= 1050 ? true : false;
             if (hoeheCheck && breiteCheck) {
-                var Bild = new Array();
-                Bild[0] = "<img id=\"bild1\" src=\"img/home.jpg\" alt=\"Picture1 not available\">";
-                Bild[1] = "<img id=\"bild2\" src=\"img/home.jpg\" alt=\"Pictures2 not available\">";
-                document.getElementById("pic1").innerHTML = Bild[0];
-                document.getElementById("pic2").innerHTML = Bild[1];
+                var bild = new Array();
+                bild[0] = '<img id="bild1" src="img/home.jpg" alt="Picture1 not available">';
+                bild[1] = '<img id="bild2" src="img/homeS.jpg" alt="Pictures2 not available">';
+                document.getElementById("pic1").innerHTML = bild[0];
+                document.getElementById("pic2").innerHTML = bild[1];
             }
         </script>
         <p>Dieses Projekt liest die Temperaturdaten aus meiner Datenbank aus und stellt sie grafisch dar. Sie werden folgendermaßen erstellt</p>    
         <ol>
-            <li id="abc">C-Programme(Sourcecode) bilden den Treiber für einen Temperatursensor auf meinem Pi bzgl. Grad(in Celsius) und Luftfeuchtigkeit(in Prozent) meiner Wohnung.</li><br>
-            <li>    Ein Shell Script ruft ein Python-Programm auf, welches über die importierte Python-Library(Adafruit), die den C-Treiber nutzt, die Werte ausliest.</li><br>
-            <li>Das Shell-Script, welches über einen CronJob alle 30 Minuten aufgerufen wird, schreibt daraufhin die über Python ermittelten Werte in eine MySQL Datenbank.</li>
-            <li>Da der CronJob doppelt aufgerufen wird, sollten die Werte über den Adminberich bereinigt werden!</li>
+            <li id="abc">C-Programme(Sourcecode) bilden den Treiber für einen Temperatursensor auf meinem Pi bzgl. Grad(in Celsius) und Luftfeuchtigkeit(in Prozent) meiner Wohnung.</li>
+            <li>Ein Shell Script ruft ein Python-Programm auf, welches über die importierte Python-Library(Adafruit), die den C-Treiber nutzt, die Werte ausliest.</li><br>
+            <li>Das Shell-Script, welches über einen CronJob alle 30 Minuten aufgerufen wird, schreibt daraufhin die über Python ermittelten Werte in eine MySQL Datenbank.</li>           
+            <li>Über das Menu können die Temperatur-und Luftfeuchtigkeitswerte abgerufen werden, sowohl grafisch als auch tabellarisch.</li>
+            <li>Da der CronJob doppelt aufgerufen wird, sollten die Werte über den Adminberich bereinigt werden! Im Adminbereich können Werte auch gelöscht werden.</li>
         </ol>
-    </center>
-    <?php
-    require_once 'inc/autoloader.php';
-    spl_autoload_register('classAutoloader');
-    $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
-    $connection = $DatabaseObject->Verbinden();
-    if (!$connection) {
-        print_r("MySQL-Aufbau ist gescheitert!<br>");
-        die();
-    }
-    $sql = "SELECT count(id) FROM temperaturs";
-    $query1 = $DatabaseObject->Abfragen($connection, $sql);
-    ?>
-    <div><center>
-            <br><br><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="graphics.php">Meßdaten<span>Records grafisch anzeigen</span></a> gefunden
-                <label>Um die Werte anzuzeigen, bedienen Sie sich bitte der Menupunkte!</label></center></div>
+        <?php
+        require_once 'inc/autoloader.php';
+        spl_autoload_register('classAutoloader');
+        $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+        $connection = $DatabaseObject->Verbinden();
+        if (!$connection) {
+            print_r("MySQL-Aufbau ist gescheitert!<br>");
+            die();
+        }
+        $sql = "SELECT count(id) FROM temperaturs";
+        $query1 = $DatabaseObject->Abfragen($connection, $sql);
+        ?>
+        <div>
+            <br><br><br><p class="pSpecial">Es wurden <?= $query1[0]['count(id)'] ?> <a class="tooltip" href="graphics.php">Meßdaten<span>Records grafisch anzeigen</span></a> gefunden
+        </div></center>
 </body>
 </html>

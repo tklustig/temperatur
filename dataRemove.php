@@ -67,7 +67,7 @@
     }
     $sql = "SELECT id,uhrzeit FROM temperaturs WHERE id>48284;";
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
-    for ($i = 0; $i < count($query1); $i++) {
+    for ($i = 0; $i < count($query1)-1; $i++) {
         if ($query1[$i]['uhrzeit'] == $query1[$i + 1]['uhrzeit']) {
             $StartIdForDeleting = $query1[$i]['id'];
             break;
