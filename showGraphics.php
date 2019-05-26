@@ -122,7 +122,11 @@ session_start();
         <center>
             <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
                 <div>
-                    <input class="feld" type=text name="anfang0" id="date" placeholder=" Datum:">
+                    <input class="feld" type=text name="date0" id="date" placeholder="Datum:" value="<?php
+                    if (!empty($_REQUEST['date0'])) {
+                        echo $_REQUEST['date0'];
+                    }
+                    ?>">
                 </div>
                 <br>
                 <img src="createGraphics.php" alt="not available">  
@@ -146,6 +150,7 @@ session_start();
 </body>
 </html>
 <?php
+//wurde ein SetbackId-Request abgefeuert?
 if (!empty($_REQUEST['submit0'])) {
     $_SESSION['pk'] = 1;
     ?>
@@ -159,5 +164,73 @@ if (!empty($_REQUEST['submit0'])) {
         showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
     </script>
     <?php
+    //wurde ein Datumrequest abgefeuert?
+} else if (!empty($_REQUEST['submit1'])) {
+    //das Datumfeld ist nicht leer?
+    if (!empty($_REQUEST['date0'])) {
+        $strDatum = "";
+        //splitte das Datumfeld anhand des Trenners(-) in ein Array
+        $arrayOfDate = explode('-', $_REQUEST['date0']);
+        //iteriere über das Array und setze den Datumstring so zusammen, dass die Datenbank ihn erkennt
+        for ($i = 0; $i < count($arrayOfDate); $i++) {
+            if ($i != count($arrayOfDate) - 1)
+                $strDatum .= $arrayOfDate[$i] . '.';
+            else
+                $strDatum .= $arrayOfDate[$i];
+        }
+        //jetzt enthalt die Variable strDatum das Datum so, wie ihn die Datenbank mitunter enthält. Initialisere Datenbankabfrage
+        require_once 'inc/autoloader.php';
+        spl_autoload_register('classAutoloader');
+        $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+        $connection = $DatabaseObject->Verbinden();
+        if (!$connection) {
+            print_r("MySQL-Aufbau ist gescheitert!<br>");
+            die();
+        }
+        $sql = "SELECT id,datum FROM temperaturs;";
+        $query1 = $DatabaseObject->Abfragen($connection, $sql);
+        if (is_array($query1)) {
+            //Iteriere über das Array(query1) und überprüfe, ob strDatum in der Datenbank enthalten ist
+            for ($i = 0; $i < count($query1); $i++) {
+                //Sofern der Wert gefunden wurde, weise ihn der Session zu und verlasse die Schleife
+                if ($strDatum == $query1[$i]['datum']) {
+                    $_SESSION['pk'] = $query1[$i]['id'];
+                    break;
+                    //andernfalls setze die Session auf 1
+                } else
+                    $_SESSION['pk'] = 1;
+            }
+        } else {
+            print_r("Fehler bei der Datenbankabfrage!");
+            die();
+        }
+        //Sofern der Wert nicht gefunden wurde, benachrichtige den User
+        if ($_SESSION['pk'] == 1) {
+            ?>
+            <script>
+                alertWidth = 300;
+                alertHeight = 150;
+                xAlertStart = 650;
+                yAlertStart = 200;
+                alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                alertText = "<p class='pAlert'>Das angeforderte Datum konnte nicht gefunden werden. Suchen sie ggf. erneut mit einem anderen Datum!</p>";
+                showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+            </script>
+            <?php
+        }
+        //das Datumfeld ist leer
+    } else {
+        ?>
+        <script>
+            alertWidth = 300;
+            alertHeight = 150;
+            xAlertStart = 650;
+            yAlertStart = 200;
+            alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+            alertText = "<p class='pAlert'>Bitte wählen Sie über das Kalendersymbol ein Datum aus, bevor Sie das nächste mal einen Request abfeuern!</p>";
+            showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+        </script>
+        <?php
+    }
 }
 ?>
