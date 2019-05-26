@@ -16,10 +16,9 @@ class MySQLClass {
         $this->host = $host;
         $this->databaseName = $name;
     }
-
+    // DB-Aufbau ueber die PDO-Klasse
     public function Verbinden() {
         try {
-            // DB-Aufbau über die PDO-Klasse
             $connection = new PDO("$this->databaseTyp:host=$this->host;dbname=$this->databaseName;charset=utf8", $this->user, $this->password);
             $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
