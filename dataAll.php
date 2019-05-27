@@ -119,9 +119,9 @@
     else
         $sql = "SELECT id,datum,uhrzeit,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,created_at FROM temperaturs WHERE id>=$id LIMIT 49";
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
-    if (is_array($query1)) {
+    if (is_array($query1))
         anzeigen($query1);
-    } else {
+    else {
         print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
         die();
     }
