@@ -53,23 +53,28 @@
             }
         </script>
     <center><h2>Temperatur-Projekt</h2></center>
-    <p>Diese Seite zeigt zunächst die ersten 50 Records ab erster Aufzeichnung an. Nach Betätigung des SubmitButtons werden die nächsten Records, abhängig von der DropDwonBox angezeigt.</p>
+    <p>Diese Seite zeigt zunächst die ersten 50 Records ab erster Aufzeichnung an. Nach Betätigung des SubmitButtons werden die nächsten Records, abhängig von der DropDownBox angezeigt.</p>
     <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
         <center>
             <div id="dropdown">
                 <?php
                 require_once 'inc/anzeigen.php';
-                echo auswahlStep(50, 50, 500);
+                echo auswahlStep(48, 48, 500);
                 ?>
             </div>
             <div id="submitDropDown">
                 <label>DropDown</label>
                 <input class="button3" type="submit" name="submit0" value="Submit">
             </div>
+            <div>
+                <input type="radio" name="age" value="30">vor
+                <input type="radio" name="age" value="60">zurück
+            </div>
             <br>
         </center>
     </form>
     <?php
+    $folder = getcwd();
     session_start();
     require_once 'inc/autoloader.php';
     spl_autoload_register('classAutoloader');
@@ -81,16 +86,24 @@
     }
     if (!empty($_REQUEST['submit0'])) {
         $boolQuery = true;
-        $_SESSION['dropD'] += $_REQUEST["anzahlItems"];
+        $datei = fopen($folder . '/txt/dropDownID.txt', 'r+');
+        $id = file_get_contents($folder . '/txt/dropDownID.txt');
+        $id += $_REQUEST["anzahlItems"];
+        fputs($datei, $id);
+        fclose($datei);
     } else {
+        if (file_exists($folder . '/txt/dropDownID.txt'))
+            unlink($folder . '/txt/dropDownID.txt');
         $boolQuery = false;
-        $_SESSION['dropD'] = 50;
+        $id = 50;
+        $datei = fopen($folder . '/txt/dropDownID.txt', 'w');
+        fputs($datei, $id);
+        fclose($datei);
     }
     if (!$boolQuery)
-        $sql = "SELECT id,datum,uhrzeit,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,created_at FROM temperaturs LIMIT 50";
+        $sql = "SELECT id,datum,uhrzeit,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,created_at FROM temperaturs LIMIT 49";
     else {
-        $id = $_SESSION['dropD'];
-        $sql = "SELECT id,datum,uhrzeit,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,created_at FROM temperaturs WHERE id>=$id LIMIT 50";
+        $sql = "SELECT id,datum,uhrzeit,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,created_at FROM temperaturs WHERE id>=$id LIMIT 49";
     }
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
     if (is_array($query1)) {

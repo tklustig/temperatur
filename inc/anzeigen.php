@@ -31,7 +31,7 @@ function anzeigen($objArrayOfRecords) {
         $result = '';
         for ($i = $minimum; $i <= $maximum; $i++) {
             if ($i % $steps == 0)
-                $result .= '<option style="font-size:15px" value="' . $i . '">Schrittweite:' . $i . '</option>';
+                $result .= '<option style="font-size:15px" value="' . $i . '">Schrittweite:' . $i/$steps . 'Tag(e)</option>';
         }
         $result = '<select name="anzahlItems">' . $result . '</select>';
         return $result;
