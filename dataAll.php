@@ -12,10 +12,9 @@
         <meta name="revisit-after" CONTENT="7 days">			<!-- definiert den erneuten Besuch des Spiders//hier:nach sieben Tagen  -->
         <title lang="de">Temperatur Analyse</title> 	<!-- weist dem HTML-Dokument in der Registerkarte einen Namen zu -->     
         <!-- Online JQuery Bibliotheken. Werden zwar nicht benötigt, können aber auch nicht schaden... -->
-        <script src="js/jquery-1.7.1.min.js"></script>
-        <script src="js/jquery-ui-1.8.17.custom.min.js"></script>
         <script src="js/menus.js"></script>
-        <script src="js/datetime.js"></script>      
+        <script src="js/datetime.js"></script> 
+        <script src="js/Alert.js"></script>
         <link href="css/style.css" rel="stylesheet">
     </head>
 
@@ -67,11 +66,16 @@
                 <input class="button3" type="submit" name="submit0" value="Submit">
             </div>
             <div>
-                <input type="radio" name="age" value="30">vor
-                <input type="radio" name="age" value="60">zurück
+                <input type="radio" name="rad" id="active1" value="frontOf">vor
+                <input type="radio" name="rad" id="active2" value="back">zurück
             </div>
             <br>
         </center>
+        <script>
+            if (document.getElementById('active1').checked == false) {
+                document.getElementById('active1').checked = true;
+            }
+        </script>
     </form>
     <?php
     $folder = getcwd();
@@ -86,11 +90,21 @@
     }
     if (!empty($_REQUEST['submit0'])) {
         $boolQuery = true;
+        //Da Sessions hier aus unerklärlichen Gründen nicht funktionieren, wird die DropDown-Id in eine Textdatei geschrieben bzw. ausgelesen
         $datei = fopen($folder . '/txt/dropDownID.txt', 'r+');
         $id = file_get_contents($folder . '/txt/dropDownID.txt');
-        $id += $_REQUEST["anzahlItems"];
-        fputs($datei, $id);
-        fclose($datei);
+        if (isset($_REQUEST['rad'])) {
+            if ($_REQUEST['rad'] == 'frontOf') {
+                $id += $_REQUEST["anzahlItems"];
+                fputs($datei, $id);
+                fclose($datei);
+            } else if ($_REQUEST['rad'] == 'back') {
+                $id -= $_REQUEST["anzahlItems"];
+                fputs($datei, $id);
+                fclose($datei);
+            }
+        } else
+            print_r('!!ERROR!! Abbruch');
     } else {
         if (file_exists($folder . '/txt/dropDownID.txt'))
             unlink($folder . '/txt/dropDownID.txt');
@@ -102,9 +116,8 @@
     }
     if (!$boolQuery)
         $sql = "SELECT id,datum,uhrzeit,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,created_at FROM temperaturs LIMIT 49";
-    else {
+    else
         $sql = "SELECT id,datum,uhrzeit,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,created_at FROM temperaturs WHERE id>=$id LIMIT 49";
-    }
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
     if (is_array($query1)) {
         anzeigen($query1);
