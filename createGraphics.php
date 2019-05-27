@@ -13,8 +13,10 @@ if (!$connection) {
 }
 if (isset($_SESSION['pk']))
     $id = $_SESSION['pk'];
-else
-    $id = 1;
+else {
+    $_SESSION['pk'] = 1;
+    $id = $_SESSION['pk'];
+}
 $sql = "SELECT id,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,datum,uhrzeit FROM temperaturs WHERE id>=$id ORDER BY id ASC LIMIT 12";
 $query1 = $DatabaseObject->Abfragen($connection, $sql);
 $temperaturA = array();

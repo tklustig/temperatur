@@ -111,7 +111,7 @@ session_start();
             xAlertStart = 650;
             yAlertStart = 200;
             alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-            alertText = "<p class='pAlert'>Sie befinden sich am unteren Ende der Meßwerte. Bitte erhöhen, anstatt reduzieren!</p>";
+            alertText = "<p class='pAlert'>Sie befinden sich am unteren Ende der Meßwerte.<br>Bitte erhöhen, anstatt reduzieren!</p>";
             showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
         </script>
         <?php

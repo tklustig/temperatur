@@ -266,3 +266,30 @@ a.tooltip:hover span{
     right:85%;
     position: absolute;        
 }
+#dropdown{
+    position: absolute;
+    top: 20%;
+    right:57%;
+}
+#submitDropDown{
+    position: absolute;
+    top: 19%;
+    right:45%;
+}
+
+table {
+    border: 2px solid #780000;
+    width: 100%;
+}
+th,td  {
+    border: 1px solid #FF0000;
+    -webkit-hyphens: auto;     
+    -moz-hyphens: auto;     
+    -ms-hyphens: auto;     
+    -o-hyphens: auto;     
+    hyphens: auto; 
+    word-wrap: break-word;
+}
+table.doFixed {
+    table-layout: fixed;
+}
