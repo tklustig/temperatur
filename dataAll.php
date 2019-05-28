@@ -58,7 +58,7 @@
             <div id="dropdown">
                 <?php
                 require_once 'inc/anzeigen.php';
-                echo auswahlStep(48, 48, 500);
+                echo auswahlStep(48, 48, 1500);
                 ?>
             </div>
             <div id="submitDropDown">
@@ -72,7 +72,7 @@
             <br>
         </center>
         <script>
-            if (document.getElementById('active1').checked == false) {
+            if (!document.getElementById('active1').checked) {
                 document.getElementById('active1').checked = true;
             }
         </script>
