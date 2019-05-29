@@ -65,17 +65,26 @@
                 <label>DropDown</label>
                 <input class="button3" type="submit" name="submit0" value="Submit">
             </div>
+            <?php
+            $checked1 = "checked";
+            $checked2 = "";
+            if (!empty($_REQUEST['submit0'])) {
+                $radioBReq = $_REQUEST['rad'];
+                if ($radioBReq == 'frontOf') {
+                    $checked1 = 'checked';
+                    $checked2 = '';
+                } else {
+                    $checked1 = '';
+                    $checked2 = 'checked';
+                }
+            }
+            ?>
             <div>
-                <input type="radio" name="rad" id="active1" value="frontOf">vor
-                <input type="radio" name="rad" id="active2" value="back">zurück
+                <input type="radio" name="rad" value="frontOf" <?php if (!empty($checked1))  ?> <?= $checked1; ?>>vor
+                <input type="radio" name="rad" value="back"<?php if (!empty($checked2))  ?> <?= $checked2; ?>>zurück
             </div>
             <br>
         </center>
-        <script>
-            if (!document.getElementById('active1').checked) {
-                document.getElementById('active1').checked = true;
-            }
-        </script>
     </form>
     <?php
     $folder = getcwd();
