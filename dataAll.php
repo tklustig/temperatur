@@ -90,7 +90,7 @@
     </script>
     <?php
     $folder = getcwd();
-    session_start();
+    $datei = $folder . '/txt/dropDownID.txt';
     require_once 'inc/autoloader.php';
     spl_autoload_register('classAutoloader');
     $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
@@ -99,39 +99,71 @@
         print_r("MySQL-Aufbau ist gescheitert!<br>");
         die();
     }
+    $sql = "SELECT max(id) AS max FROM temperaturs";
+    $query1 = $DatabaseObject->Abfragen($connection, $sql);
+    if (is_array($query1))
+        $maxId = $query1[0]['max'];
+    else {
+        print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+        die();
+    }
     if (!empty($_REQUEST['submit0'])) {
-        $boolQuery = true;
-        //Da Sessions hier aus unerklärlichen Gründen nicht funktionieren, wird die DropDown-Id in eine Textdatei geschrieben bzw. ausgelesen
-        $datei = fopen($folder . '/txt/dropDownID.txt', 'r+');
-        $id = file_get_contents($folder . '/txt/dropDownID.txt');
+        $boolQuery2 = true;
+        //Da Sessions hier aus unerklärlichen Gründen nicht funktionieren, wird die DropDown-Id in eine Textdatei geschrieben bzw. ausgelesen      
+        $id = file_get_contents($datei);
         if (isset($_REQUEST['rad'])) {
             if ($_REQUEST['rad'] == 'frontOf') {
+                $dummy = $id;
                 $id += $_REQUEST["anzahlItems"];
-                fputs($datei, $id);
-                fclose($datei);
+                if ($id > $maxId) {
+                    ?>
+                    <script>
+                        alertWidth = 250;
+                        alertHeight = 200;
+                        xAlertStart = 650;
+                        yAlertStart = 200;
+                        alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                        alertText = "<p class='pAlert'>Sie befinden sich am oberen Ende der Meßwerte.<br>Bitte reduzieren, anstatt erhöhen!</p>";
+                        showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                    </script>
+                    <?php
+                    $id = $dummy;
+                } else
+                    file_put_contents($datei, $id);
             } else if ($_REQUEST['rad'] == 'back') {
+                $dummy = $id;
                 $id -= $_REQUEST["anzahlItems"];
-                fputs($datei, $id);
-                fclose($datei);
+                if ($id < 0) {
+                    ?>
+                    <script>
+                        alertWidth = 250;
+                        alertHeight = 200;
+                        xAlertStart = 650;
+                        yAlertStart = 200;
+                        alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                        alertText = "<p class='pAlert'>Sie befinden sich am unteren Ende der Meßwerte.<br>Bitte erhöhen, anstatt reduzieren!</p>";
+                        showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                    </script>
+                    <?php
+                    $id = $dummy;
+                } else
+                    file_put_contents($datei, $id);
             }
         } else
             print_r('!!ERROR!! Abbruch');
     } else {
-        if (file_exists($folder . '/txt/dropDownID.txt'))
+        if (file_exists($datei))
             unlink($folder . '/txt/dropDownID.txt');
-        $boolQuery = false;
-        $id = 50;
-        $datei = fopen($folder . '/txt/dropDownID.txt', 'w');
-        fputs($datei, $id);
-        fclose($datei);
+        $boolQuery2 = false;
+        file_put_contents($datei, '50');
     }
-    if (!$boolQuery)
+    if (!$boolQuery2)
         $sql = "SELECT id,datum,uhrzeit,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,created_at FROM temperaturs LIMIT 49";
     else
         $sql = "SELECT id,datum,uhrzeit,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,created_at FROM temperaturs WHERE id>=$id LIMIT 49";
-    $query1 = $DatabaseObject->Abfragen($connection, $sql);
-    if (is_array($query1))
-        anzeigen($query1);
+    $query2 = $DatabaseObject->Abfragen($connection, $sql);
+    if (is_array($query2))
+        anzeigen($query2);
     else {
         print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
         die();
