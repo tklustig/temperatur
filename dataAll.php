@@ -15,6 +15,7 @@
         <script src="js/menus.js"></script>
         <script src="js/datetime.js"></script> 
         <script src="js/Alert.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="crossorigin="anonymous"></script>
         <link href="css/style.css" rel="stylesheet">
     </head>
 
@@ -65,27 +66,28 @@
                 <label>DropDown</label>
                 <input class="button3" type="submit" name="submit0" value="Submit">
             </div>
-            <?php
-            $checked1 = "checked";
-            $checked2 = "";
-            if (!empty($_REQUEST['submit0'])) {
-                $radioBReq = $_REQUEST['rad'];
-                if ($radioBReq == 'frontOf') {
-                    $checked1 = 'checked';
-                    $checked2 = '';
-                } else {
-                    $checked1 = '';
-                    $checked2 = 'checked';
-                }
-            }
-            ?>
             <div>
-                <input type="radio" name="rad" value="frontOf" <?php if (!empty($checked1))  ?> <?= $checked1; ?>>vor
-                <input type="radio" name="rad" value="back"<?php if (!empty($checked2))  ?> <?= $checked2; ?>>zurück
+                <input type="radio" name="rad" id="dummy1" value="frontOf">vor
+                <input type="radio" name="rad" id="dummy2" value="back">zurück
             </div>
             <br>
         </center>
     </form>
+    <script>
+        function saveContents() {
+            var rbIsClicked = $("input[type='radio'][name='rad']:checked");
+            if (rbIsClicked.length != 0)
+                localStorage['rbIsClicked'] = rbIsClicked.attr("id");
+        }
+        function restoreContents() {
+            var rbIsClicked = localStorage['rbIsClicked'];
+            if (rbIsClicked != undefined) {
+                $('#' + rbIsClicked).attr('checked', true);
+            }
+        }
+        $("input[type='radio'][name='rad']").on("change", saveContents);
+        restoreContents();
+    </script>
     <?php
     $folder = getcwd();
     session_start();
