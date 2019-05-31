@@ -73,7 +73,7 @@ session_start();
                 alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nKlein - Buchholzer - Kirchweg 25\n30659 Hannover\nMobil:0152/37389041");
             }
         </script>
-    <center><h1>Temperatur-Projekt</h1>
+    <center><h1>Schaubilder</h1>
         <p class="pSpecialo">Graphische Darstellung der Temperatur-und Luftfeuchtigkeitswerte</p>
     </center>
     <?php

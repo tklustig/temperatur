@@ -52,7 +52,7 @@
                 alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nKlein - Buchholzer - Kirchweg 25\n30659 Hannover\nMobil:0152/37389041");
             }
         </script>
-    <center><h2>Temperatur-Projekt</h2></center>
+    <center><h2>Daten ohne Filter</h2></center>
     <p>Diese Seite zeigt zunächst die ersten 50 Records ab erster Aufzeichnung an. Nach Betätigung des SubmitButtons werden die nächsten Records, abhängig von der DropDownBox angezeigt.</p>
     <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
         <center>
