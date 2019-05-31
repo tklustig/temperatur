@@ -141,7 +141,7 @@ session_start();
                 </div>
                 <div>
                     <br>
-                    <label>Datum anzeigen</label>
+                    <label>gemäß Datum anzeigen</label>
                     <input class="button3" type="submit" name="submit1" value="Submit">
                 </div>
             </form>

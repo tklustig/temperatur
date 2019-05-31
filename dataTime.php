@@ -19,9 +19,25 @@
         <script src="js/Alert.js"></script>
         <!--  CSS Bibliotheken -->
         <link href="css/style.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/jquery-ui-1.8.17.custom.css">
+        <style type="text/css"></style>
     </head>
 
     <body> <!-- Definition des Bodybereiches -->
+        <script>
+            $(document).ready(function () {
+                $('#date').datepicker({
+                    showOn: 'button',
+                    buttonImage: 'calendar.png',
+                    buttonImageOnly: true,
+                    numberOfMonths: 2,
+                    showButtonPanel: true,
+                    autoSize: true,
+                    monthNames: ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+                    dateFormat: 'dd-mm-yy'
+                });
+            });
+        </script>
         <div class="mainDiv">
             <div id="uhr"></div>
         </div>
@@ -54,6 +70,102 @@
             }
         </script>
     <center><h2>Daten gemäß Datum</h2>
+        <p>Hier werden nach dem Push auf den Submittbutton Records ab dem gewählten Datum angezeigt.</p>
+        <div>
+            <center>
+                <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+                    <div>
+                        <input class="feld" type=text name="date0" id="date" placeholder="Datum:" value="<?php
+                        if (!empty($_REQUEST['date0'])) {
+                            echo $_REQUEST['date0'];
+                        }
+                        ?>">
+                    </div>                  
+                    <div>
+                        <br>
+                        <label>gemäß Datum anzeigen</label>
+                        <input class="button3" type="submit" name="submit1" value="Submit">
+                    </div>
+                </form>
+            </center>
+        </div>
         <?php
+        if (!empty($_REQUEST['submit1'])) {
+            if (empty($_REQUEST['date0'])) {
+                ?>
+                <script>
+                    alertWidth = 250;
+                    alertHeight = 200;
+                    xAlertStart = 650;
+                    yAlertStart = 200;
+                    alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                    alertText = "<p class='pAlert'>Warum erzeugen Sie unnötigen Traffic?<br>Bitte ein Datum wählen, bevor Sie einen Request abfeuern!</p>";
+                    showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                </script>
+                <?php
+                die();
+            } else {
+                $strDatum = "";
+                //splitte das Datumfeld anhand des Trenners(-) in ein Array
+                $arrayOfDate = explode('-', $_REQUEST['date0']);
+                //iteriere über das Array und setze den Datumstring so zusammen, dass die Datenbank ihn erkennt
+                for ($i = 0; $i < count($arrayOfDate); $i++) {
+                    if ($i != count($arrayOfDate) - 1)
+                        $strDatum .= $arrayOfDate[$i] . '.';
+                    else
+                        $strDatum .= $arrayOfDate[$i];
+                }
+                //jetzt enthalt die Variable strDatum das Datum so, wie ihn die Datenbank mitunter enthält. Initialisere Datenbankabfrage
+                require_once 'inc/autoloader.php';
+                spl_autoload_register('classAutoloader');
+                $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+                $connection = $DatabaseObject->Verbinden();
+                if (!$connection) {
+                    print_r("MySQL-Aufbau ist gescheitert!<br>");
+                    die();
+                }
+                $sql = "SELECT datum FROM temperaturs;";
+                $query1 = $DatabaseObject->Abfragen($connection, $sql);
+                if (is_array($query1)) {
+                    //Iteriere über das Array(query1) und überprüfe, ob strDatum in der Datenbank enthalten ist
+                    for ($i = 0; $i < count($query1); $i++) {
+                        //Sofern der Wert gefunden wurde, weise ihn der Session zu und verlasse die Schleife
+                        if ($strDatum == $query1[$i]['datum']) {
+                            $datum = $query1[$i]['datum'];
+                            break;
+                            //andernfalls setze die Session auf 1
+                        } else
+                            $datum = 1;
+                    }
+                } else {
+                    print_r("Fehler bei der Datenbankabfrage!");
+                    die();
+                }
+                //Sofern der Wert nicht gefunden wurde, benachrichtige den User
+                if ($datum == 1) {
+                    ?>
+                    <script>
+                        alertWidth = 300;
+                        alertHeight = 150;
+                        xAlertStart = 650;
+                        yAlertStart = 200;
+                        alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                        alertText = "<p class='pAlert'>Das angeforderte Datum konnte nicht gefunden werden. Suchen sie ggf. erneut mit einem anderen Datum!</p>";
+                        showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                    </script>
+                    <?php
+                } else {
+                    require_once 'inc/anzeigen.php';
+                    $sql = "SELECT id,datum,uhrzeit,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,created_at FROM temperaturs WHERE datum='$datum' LIMIT 49";
+                    $query2 = $DatabaseObject->Abfragen($connection, $sql);
+                    if (is_array($query2))
+                        anzeigen($query2);
+                    else {
+                        print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                        die();
+                    }
+                }
+            }
+        }
         ?>
 
