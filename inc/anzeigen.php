@@ -3,7 +3,7 @@
 function anzeigen($objArrayOfRecords) {
     $i = 0;
     if (!empty($objArrayOfRecords)) {
-        foreach ($objArrayOfRecords as $daten) {   //Datensätze in Tabellenform auslesen    
+        foreach ($objArrayOfRecords as $daten) {   //Datensätze in Tabellenform auslesen
             $i++;
             ?>
             <table class="doFixed"><tr>
@@ -31,7 +31,17 @@ function anzeigen($objArrayOfRecords) {
         $result = '';
         for ($i = $minimum; $i <= $maximum; $i++) {
             if ($i % $steps == 0)
-                $result .= '<option style="font-size:15px" value="' . $i . '">Schrittweite:' . $i/$steps . 'Tag(e)</option>';
+                $result .= '<option style="font-size:15px" value="' . $i . '">Schrittweite:' . $i / $steps . 'Tag(e)</option>';
+        }
+        $result = '<select name="anzahlItems">' . $result . '</select>';
+        return $result;
+    }
+
+    function auswahlStepId($steps, $minimum, $maximum) {
+        $result = '';
+        for ($i = $minimum; $i <= $maximum; $i++) {
+            if ($i % $steps == 0)
+                $result .= '<option style="font-size:15px" value="' . $i . '">Id:' . $i / $steps . '</option>';
         }
         $result = '<select name="anzahlItems">' . $result . '</select>';
         return $result;
