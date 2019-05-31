@@ -53,7 +53,7 @@
             }
         </script>
     <center><h2>Daten ohne Filter</h2></center>
-    <p>Diese Seite zeigt zunächst die ersten 50 Records ab erster Aufzeichnung an. Nach Betätigung des SubmitButtons werden die nächsten Records, abhängig von der DropDownBox angezeigt.</p>
+    <p>Diese Seite zeigt zunächst die ersten 50 Records ab erster Aufzeichnung an. Nach Betätigung des SubmitButtons werden die nächsten Records angezeigt. Die Id hat Vorrang!</p>
     <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
         <center>
             <div id="dropdown">
@@ -62,8 +62,12 @@
                 echo auswahlStep(48, 48, 1500);
                 ?>
             </div>
+            <div id="textbox1">
+                <label>Ab Id:</label>
+                <input type="text" name="startId" size="30" maxlength="30">
+            </div>
             <div id="submitDropDown">
-                <label>DropDown</label>
+                <label>Abfeuern!</label>
                 <input class="button3" type="submit" name="submit0" value="Submit">
             </div>
             <div>
@@ -108,6 +112,33 @@
         die();
     }
     if (!empty($_REQUEST['submit0'])) {
+        if (!empty($_REQUEST['startId'])) {
+            $id = $_REQUEST['startId'];
+            if (!is_numeric($id)) {
+                ?>
+                <script>
+                    alertWidth = 250;
+                    alertHeight = 200;
+                    xAlertStart = 650;
+                    yAlertStart = 200;
+                    alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                    alertText = "<p class='pAlert'>Nur Zahlen werden bzgl. der Primärschlüsselabfrage akzeptiert!</p>";
+                    showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                </script>
+                <?php
+                die();
+            }
+            $sql = "SELECT id,datum,uhrzeit,Temperatur_Celsius,Luftfeuchtigkeit_Prozent,created_at FROM temperaturs WHERE id>=$id LIMIT 49";
+            $query2 = $DatabaseObject->Abfragen($connection, $sql);
+            if (is_array($query2))
+                anzeigen($query2);
+            else {
+                print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                die();
+            }
+            file_put_contents($datei, $id);
+            die();
+        }
         $boolQuery2 = true;
         //Da Sessions hier aus unerklärlichen Gründen nicht funktionieren, wird die DropDown-Id in eine Textdatei geschrieben bzw. ausgelesen      
         $id = file_get_contents($datei);

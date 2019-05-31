@@ -281,6 +281,11 @@ a.tooltip:hover span{
     top: 30%;
     right:50%;
 }
+#textbox1{
+    position: absolute;
+    top: 20%;
+    right:25%;
+}
 #submitDropDown{
     position: absolute;
     top: 19%;
