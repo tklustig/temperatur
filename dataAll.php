@@ -44,6 +44,7 @@
                 <div class="dropdown-inhalt_0" id="auswahl_2">
                     <a href="dataDelete.php">Daten löschen</a>
                     <a href="dataRemove.php">Duplikate entfernen</a>
+                    <a href="index.php">Startseite</a>
                 </div>
             </li>
         </ul>
@@ -63,8 +64,26 @@
                 ?>
             </div>
             <div id="textbox1">
+                <?php
+                require_once 'inc/autoloader.php';
+                spl_autoload_register('classAutoloader');
+                $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+                $connection = $DatabaseObject->Verbinden();
+                if (!$connection) {
+                    print_r("MySQL-Aufbau ist gescheitert!<br>");
+                    die();
+                }
+                $sql = "SELECT max(id) AS max FROM temperaturs";
+                $query1 = $DatabaseObject->Abfragen($connection, $sql);
+                if (is_array($query1))
+                    $maxId = $query1[0]['max'];
+                else {
+                    print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                    die();
+                }
+                ?>
                 <label>Ab Id:</label>
-                <input type="text" name="startId" size="30" maxlength="30">
+                <input type="text" name="startId" size="30" maxlength="30" placeholder="maximal bis zu ID: <?= $maxId ?>">
             </div>
             <div id="submitDropDown">
                 <label>Abfeuern!</label>

@@ -47,6 +47,7 @@
                 <div class="dropdown-inhalt_0" id="auswahl_0">
                     <a href="info.php">PHP-Info</a>
                     <a href="javascript:impressum()">Impressum</a>
+                    <a href="index.php">Startseite</a>
                 </div>
             </li>
             <li class="dropdown">
@@ -61,6 +62,7 @@
                 <div class="dropdown-inhalt_0" id="auswahl_2">
                     <a href="dataDelete.php">Daten löschen</a>
                     <a href="dataRemove.php">Duplikate entfernen</a>
+                    <a href="index.php">Startseite</a>
                 </div>
             </li>
         </ul>

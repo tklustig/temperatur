@@ -28,6 +28,7 @@
                 <div class="dropdown-inhalt_0" id="auswahl_0">
                     <a href="info.php">PHP-Info</a>
                     <a href="javascript:impressum()">Impressum</a>
+                    <a href="index.php">Startseite</a>
                 </div>
             </li>
             <li class="dropdown">
@@ -70,7 +71,6 @@
         </form>
         <?php
         if (!empty($_REQUEST['submit2'])) {
-            echo"<br><br><br>";
             if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
                 $projectIsOnline = false;
             else
