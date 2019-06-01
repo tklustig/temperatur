@@ -70,6 +70,11 @@
         </form>
         <?php
         if (!empty($_REQUEST['submit2'])) {
+            echo"<br><br><br>";
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
+                $projectIsOnline = false;
+            else
+                $projectIsOnline = true;
             if (empty($_REQUEST['startId'])) {
                 ?>
                 <script>
@@ -88,6 +93,21 @@
                     <?= auswahlStepId(1, $_REQUEST['startId'], $_REQUEST['startId'] + 100);
                     ?>            
                 </div> 
+                <?php
+            }
+            if (!$projectIsOnline) {
+                
+            } else {
+                ?>
+                <script>
+                    alertWidth = 250;
+                    alertHeight = 200;
+                    xAlertStart = 650;
+                    yAlertStart = 200;
+                    alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                    alertText = "<p class='pAlert'>Online ist diese Option nicht verfügbar(s. Beschreibung)</p>";
+                    showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                </script>
                 <?php
             }
         }

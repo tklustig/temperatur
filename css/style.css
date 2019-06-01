@@ -273,12 +273,12 @@ a.tooltip:hover span{
 }
 #dropdown2{
     position: absolute;
-    top: 35%;
+    top: 40%;
     right:61%;
 }
 #textbox{
     position: absolute;
-    top: 30%;
+    top: 35%;
     right:50%;
 }
 #textbox1{
@@ -293,12 +293,12 @@ a.tooltip:hover span{
 }
 #submitDropDown1{
     position: absolute;
-    top: 29%;
+    top: 34%;
     right:34%;
 }
 #submitDropDown2{
     position: absolute;
-    top: 29%;
+    top: 34%;
     right:42%;
 }
 
