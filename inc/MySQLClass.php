@@ -16,6 +16,7 @@ class MySQLClass {
         $this->host = $host;
         $this->databaseName = $name;
     }
+
     // DB-Aufbau ueber die PDO-Klasse
     public function Verbinden() {
         try {
@@ -69,6 +70,10 @@ class MySQLClass {
             print_r($e->getMessage());
             return false;
         }
+    }
+
+    public function closeConnection($connection) {
+        return $connection = null;
     }
 
 }

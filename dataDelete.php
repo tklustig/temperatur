@@ -59,23 +59,85 @@
             <div id="dropdown2">
                 <?php
                 require_once 'inc/anzeigen.php';
-                echo auswahlStepId(1, 1, 10);
-                ?>  
+                ?><?=
+                auswahlStepId(1, 1, 10);
+                require_once 'inc/autoloader.php';
+                spl_autoload_register('classAutoloader');
+                $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+                $connection = $DatabaseObject->Verbinden();
+                if (!$connection) {
+                    print_r("MySQL-Aufbau ist gescheitert!<br>");
+                    die();
+                }
+                $sql = "SELECT max(id) AS max FROM temperaturs";
+                $query1 = $DatabaseObject->Abfragen($connection, $sql);
+                if (is_array($query1))
+                    $maxId = $query1[0]['max'];
+                else {
+                    print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                    die();
+                }
+                ?>
             </div>
             <div id="textbox">
                 <label>Ab Id:</label>
-                <input type="text" name="startId" size="30" maxlength="30">
+                <input type="text" name="startId" size="30" maxlength="30" placeholder="Maximal bis zur ID  <?= $maxId ?>">
             </div>
             <input class="button3" id="submitDropDown1" type="submit" name="submit1" value="Submit">
             <input class="button2" id="submitDropDown2" type="submit" name="submit2" value="DropDown">
-        </form>
-        <?php
-        if (!empty($_REQUEST['submit2'])) {
+            <div id="radioButton">
+                <input type="radio" name="rad" id="dummy1" value="exact">genau die Id
+                <br><input type="radio" name="rad" id="dummy2" value="upTo">ab Id
+            </div>
+            <?php
             if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
                 $projectIsOnline = false;
             else
                 $projectIsOnline = true;
-            if (empty($_REQUEST['startId'])) {
+            //Alle Eventualitäten nach dem DropDown-Request verarbeiten
+            if (!empty($_REQUEST['submit2'])) {
+                if (empty($_REQUEST['startId'])) {
+                    ?>
+                    <script>
+                        alertWidth = 250;
+                        alertHeight = 200;
+                        xAlertStart = 650;
+                        yAlertStart = 200;
+                        alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                        alertText = "<p class='pAlert'>Warum erzeugen Sie unnötigen Traffic?<br>Bitte die Start-Id in die Textbox eingeben!</p>";
+                        showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                    </script>
+                    <?php
+                    die();
+                } else {
+                    ?>            
+                    <div id="dropdown2"> 
+                        <?= auswahlStepId(1, $_REQUEST['startId'], $_REQUEST['startId'] + 100);
+                        ?>            
+                    </div> 
+                </form>
+                <?php
+            }
+            if (!empty($_REQUEST['startId'])) {
+                if ($_REQUEST['startId'] > $maxId) {
+                    ?>
+                    <script>
+                        alertWidth = 250;
+                        alertHeight = 200;
+                        xAlertStart = 650;
+                        yAlertStart = 200;
+                        alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                        alertText = "<p class='pAlert'>Bitte nicht höher als die maximal zulässige Id eingeben.<br> Der Placeholder teilt ihnen mit, bis zu welcher Id Sie löschen können.</p>";
+                        showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                    </script>
+                    <?php
+                }
+                die();
+            }
+        }
+        //Alle Eventualitäten nach dem Submit-Request verarbeiten
+        if (!empty($_REQUEST['submit1'])) {
+            if (empty($_REQUEST['rad'])) {
                 ?>
                 <script>
                     alertWidth = 250;
@@ -83,21 +145,12 @@
                     xAlertStart = 650;
                     yAlertStart = 200;
                     alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                    alertText = "<p class='pAlert'>Warum erzeugen Sie unnötigen Traffic?<br>Bitte die Start-Id in die Textbox eingeben!</p>";
+                    alertText = "<p class='pAlert'>Bitte einen der beiden Radiobuttons aktiveren,<br>um festzulegen, wieviele Records gelöscht werden sollen!</p>";
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                 </script>
                 <?php
-            } else {
-                ?>            
-                <div id="dropdown2"> 
-                    <?= auswahlStepId(1, $_REQUEST['startId'], $_REQUEST['startId'] + 100);
-                    ?>            
-                </div> 
-                <?php
-            }
-            if (!$projectIsOnline) {
-                
-            } else {
+                die();
+            } else if ($projectIsOnline) {
                 ?>
                 <script>
                     alertWidth = 250;
@@ -109,6 +162,26 @@
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                 </script>
                 <?php
+                die();
+            }
+            //hier werden Records, abhänging von der RadionButtonwahl(ein einzelner oder mehrere) und ggf. der ID gelöscht
+            if (isset($_REQUEST['anzahlItem']) && $_REQUEST['anzahlItem'] > 1) {
+                $sql = 'DELETE FROM tempwraturs WHERE id=' . $_REQUEST["startId"];
+                $connection->beginTransaction();
+         
+            } else {
+                ?>
+                <script>
+                    alertWidth = 250;
+                    alertHeight = 200;
+                    xAlertStart = 650;
+                    yAlertStart = 200;
+                    alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                    alertText = "<p class='pAlert'>Bitte einen beliebigen Wert aus der DropDownbox größer als eins wählen.</p>";
+                    showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                </script>
+                <?php
+                die();
             }
         }
         ?>

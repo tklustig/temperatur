@@ -301,6 +301,11 @@ a.tooltip:hover span{
     top: 34%;
     right:42%;
 }
+#radioButton{
+    position: absolute;
+    top: 34%;
+    right:25%;
+}
 
 table {
     border: 2px solid #780000;
