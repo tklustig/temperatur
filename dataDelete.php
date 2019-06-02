@@ -75,6 +75,7 @@
                     $maxId = $query1[0]['max'];
                 else {
                     print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                     print_r('<br>' . $connection->errorInfo());
                     die();
                 }
                 ?>
@@ -167,9 +168,18 @@
             //hier werden Records, abhänging von der RadionButtonwahl(ein einzelner oder mehrere) und ggf. der ID gelöscht
             if (isset($_REQUEST['anzahlItems']) && $_REQUEST['anzahlItems'] > 1) {
                 if ($_REQUEST['rad'] == 'exact') {
-                    $sql = 'DELETE FROM temperaturs WHERE id=' . $_REQUEST["anzahlItems"];
-                    $connection->beginTransaction();
-                    $query2 = $DatabaseObject->Abfragen($connection, $sql);
+                    try {
+                        $sql = 'DELETE FROM temperaturs WHERE id=' . $_REQUEST["anzahlItems"];
+                        $connection->beginTransaction();
+                        $query2 = $DatabaseObject->Abfragen($connection, $sql);
+                        $connection->commit();
+                    } catch (Exception $e) {
+                        print_r('Fehler:' . $e->getMessage() . ', Felercode:' . $e->getCode() . ', in Zeile:' . $e->getLine() . ' ,in Datei:' . $e->getFile());
+                        print_r('<br>Sämtliche Löschvorgänge wurden rückgängig gemacht oder erst gar nicht ausgeführt!');
+                        $connection->rollBack();
+                        print_r('<br>' . $connection->errorInfo());
+                        die();
+                    }
                     if ($query2) {
                         ?>
                         <script>
@@ -185,6 +195,7 @@
                         <?php
                     } else {
                         print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                        print_r('<br>' . $connection->errorInfo());
                         die();
                     }
                 } else if ($_REQUEST['rad'] == 'upTo') {

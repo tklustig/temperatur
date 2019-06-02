@@ -79,6 +79,7 @@
                     $maxId = $query1[0]['max'];
                 else {
                     print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                     print_r('<br>' . $connection->errorInfo());
                     die();
                 }
                 ?>
@@ -128,6 +129,7 @@
         $maxId = $query1[0]['max'];
     else {
         print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+         print_r('<br>' . $connection->errorInfo());
         die();
     }
     if (!empty($_REQUEST['submit0'])) {
@@ -153,6 +155,7 @@
                 anzeigen($query2);
             else {
                 print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                 print_r('<br>' . $connection->errorInfo());
                 die();
             }
             file_put_contents($datei, $id);
@@ -222,6 +225,7 @@
         anzeigen($query2);
     else {
         print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+         print_r('<br>' . $connection->errorInfo());
         die();
     }
     ?>
