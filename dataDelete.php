@@ -75,7 +75,9 @@
                     $maxId = $query1[0]['max'];
                 else {
                     print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
-                     print_r('<br>' . $connection->errorInfo());
+                    foreach ($connection->errorInfo() as $item) {
+                        print_r('<br>' . $item);
+                    }
                     die();
                 }
                 ?>
@@ -168,8 +170,15 @@
             //hier werden Records, abhänging von der RadionButtonwahl(ein einzelner oder mehrere) und ggf. der ID gelöscht
             if (isset($_REQUEST['anzahlItems']) && $_REQUEST['anzahlItems'] > 1) {
                 if ($_REQUEST['rad'] == 'exact') {
+                    $sql = 'DELETE FROM temperaturs WHERE id=' . $_REQUEST["anzahlItems"];
+                    $deleteRecords = true;
+                } else if ($_REQUEST['rad'] == 'upTo') {
+                    $sql = 'DELETE FROM temperaturs WHERE id >=' . $_REQUEST["anzahlItems"];
+                    $deleteRecords = true;
+                } else
+                    $deleteRecords = false;
+                if ($deleteRecords) {
                     try {
-                        $sql = 'DELETE FROM temperaturs WHERE id=' . $_REQUEST["anzahlItems"];
                         $connection->beginTransaction();
                         $query2 = $DatabaseObject->Abfragen($connection, $sql);
                         $connection->commit();
@@ -180,26 +189,41 @@
                         print_r('<br>' . $connection->errorInfo());
                         die();
                     }
-                    if ($query2) {
-                        ?>
-                        <script>
-                            var alertWidth = 250;
-                            var alertHeight = 200;
-                            var xAlertStart = 650;
-                            var yAlertStart = 200;
-                            var id = "<?php echo $_REQUEST["anzahlItems"] ?>";
-                            var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                            var alertText = "<p class='pAlert'>Der Record mit der ID:" + id + " wurde gelöscht";
-                            showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
-                        </script>
-                        <?php
+                    if ($query2 && $_REQUEST["anzahlItems"] <= $maxId) {
+                        if ($_REQUEST['rad'] == 'exact') {
+                            ?>
+                            <script>
+                                var alertWidth = 250;
+                                var alertHeight = 200;
+                                var xAlertStart = 650;
+                                var yAlertStart = 200;
+                                var id = "<?php echo $_REQUEST["anzahlItems"] ?>";
+                                var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                                var alertText = "<p class='pAlert'>Der Record mit der ID:" + id + " wurde gelöscht";
+                                showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                            </script>
+                            <?php
+                        } else if ($_REQUEST['rad'] == 'upTo') {
+                            ?>
+                            <script>
+                                var alertWidth = 250;
+                                var alertHeight = 200;
+                                var xAlertStart = 650;
+                                var yAlertStart = 200;
+                                var id = "<?php echo $_REQUEST["anzahlItems"] ?>";
+                                var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                                var alertText = "<p class='pAlert'>Alle Record ab der ID:" + id + " wurden gelöscht";
+                                showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                            </script>
+                            <?php
+                        }
                     } else {
                         print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
-                        print_r('<br>' . $connection->errorInfo());
+                        foreach ($connection->errorInfo() as $item) {
+                            print_r('<br>' . $item);
+                        }
                         die();
                     }
-                } else if ($_REQUEST['rad'] == 'upTo') {
-                    
                 }
             } else {
                 ?>
@@ -209,7 +233,7 @@
                     xAlertStart = 650;
                     yAlertStart = 200;
                     alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                    alertText = "<p class='pAlert'>Bitte einen beliebigen Wert aus der DropDownbox größer als eins wählen.</p>";
+                    alertText = "<p class='pAlert'>Bitte einen Wert aus der DropDownbox größer als eins und kleiner als Maximal wählen.</p>";
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                 </script>
                 <?php

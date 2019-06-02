@@ -62,7 +62,7 @@
     }
     $sql = "SELECT id,uhrzeit FROM temperaturs WHERE id>48284;";
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
-    for ($i = 0; $i < count($query1)-1; $i++) {
+    for ($i = 0; $i < count($query1) - 1; $i++) {
         if ($query1[$i]['uhrzeit'] == $query1[$i + 1]['uhrzeit']) {
             $StartIdForDeleting = $query1[$i]['id'];
             break;
@@ -95,7 +95,9 @@
                         <?php
                     } else {
                         print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
-                         print_r('<br>' . $connection->errorInfo());
+                        foreach ($connection->errorInfo() as $item) {
+                            print_r('<br>' . $item);
+                        }
                         die();
                     }
                 } else {

@@ -164,7 +164,9 @@
                         anzeigen($query2);
                     else {
                         print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
-                         print_r('<br>' . $connection->errorInfo());
+                        foreach ($connection->errorInfo() as $item) {
+                            print_r('<br>' . $item);
+                        }
                         die();
                     }
                 }
