@@ -106,12 +106,12 @@ session_start();
     if (isset($_SESSION['pk']) && $_SESSION['pk'] < 0) {
         ?>
         <script>
-            alertWidth = 250;
-            alertHeight = 200;
-            xAlertStart = 650;
-            yAlertStart = 200;
-            alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-            alertText = "<p class='pAlert'>Sie befinden sich am unteren Ende der Meßwerte.<br>Bitte erhöhen, anstatt reduzieren!</p>";
+            var alertWidth = 250;
+            var alertHeight = 200;
+            var xAlertStart = 650;
+            var yAlertStart = 200;
+            var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+            var alertText = "<p class='pAlert'>Sie befinden sich am unteren Ende der Meßwerte.<br>Bitte erhöhen, anstatt reduzieren!</p>";
             showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
         </script>
         <?php
@@ -155,12 +155,12 @@ if (!empty($_REQUEST['submit0'])) {
     $_SESSION['pk'] = 1;
     ?>
     <script>
-        alertWidth = 300;
-        alertHeight = 150;
-        xAlertStart = 650;
-        yAlertStart = 200;
-        alertTitle = "<p class='pTitle'><b>! Information !</b></p>";
-        alertText = "<p class='pAlert'>Sie befinden sich jetzt am unteren Ende der Meßwerte!</p>";
+        var alertWidth = 300;
+        var alertHeight = 150;
+        var xAlertStart = 650;
+        var yAlertStart = 200;
+        var alertTitle = "<p class='pTitle'><b>! Information !</b></p>";
+        var alertText = "<p class='pAlert'>Sie befinden sich jetzt am unteren Ende der Meßwerte!</p>";
         showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
     </script>
     <?php
@@ -208,12 +208,12 @@ if (!empty($_REQUEST['submit0'])) {
         if ($_SESSION['pk'] == 1) {
             ?>
             <script>
-                alertWidth = 300;
-                alertHeight = 150;
-                xAlertStart = 650;
-                yAlertStart = 200;
-                alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                alertText = "<p class='pAlert'>Das angeforderte Datum konnte nicht gefunden werden. Suchen sie ggf. erneut mit einem anderen Datum!</p>";
+                var alertWidth = 300;
+                var alertHeight = 150;
+                var xAlertStart = 650;
+                var yAlertStart = 200;
+                var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                var alertText = "<p class='pAlert'>Das angeforderte Datum konnte nicht gefunden werden. Suchen sie ggf. erneut mit einem anderen Datum!</p>";
                 showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
             </script>
             <?php
@@ -222,12 +222,12 @@ if (!empty($_REQUEST['submit0'])) {
     } else {
         ?>
         <script>
-            alertWidth = 300;
-            alertHeight = 150;
-            xAlertStart = 650;
-            yAlertStart = 200;
-            alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-            alertText = "<p class='pAlert'>Bitte wählen Sie über das Kalendersymbol ein Datum aus, bevor Sie das nächste mal einen Request abfeuern!</p>";
+            var alertWidth = 300;
+            var alertHeight = 150;
+            var xAlertStart = 650;
+            var yAlertStart = 200;
+            var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+            var alertText = "<p class='pAlert'>Bitte wählen Sie über das Kalendersymbol ein Datum aus, bevor Sie das nächste mal einen Request abfeuern!</p>";
             showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
         </script>
         <?php

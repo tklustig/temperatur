@@ -96,12 +96,12 @@
             if (empty($_REQUEST['date0'])) {
                 ?>
                 <script>
-                    alertWidth = 250;
-                    alertHeight = 200;
-                    xAlertStart = 650;
-                    yAlertStart = 200;
-                    alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                    alertText = "<p class='pAlert'>Warum erzeugen Sie unnötigen Traffic?<br>Bitte ein Datum wählen, bevor Sie einen Request abfeuern!</p>";
+                    var alertWidth = 250;
+                    var alertHeight = 200;
+                    var xAlertStart = 650;
+                    var yAlertStart = 200;
+                    var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                    var alertText = "<p class='pAlert'>Warum erzeugen Sie unnötigen Traffic?<br>Bitte ein Datum wählen, bevor Sie einen Request abfeuern!</p>";
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                 </script>
                 <?php
@@ -147,12 +147,12 @@
                 if ($datum == 1) {
                     ?>
                     <script>
-                        alertWidth = 300;
-                        alertHeight = 150;
-                        xAlertStart = 650;
-                        yAlertStart = 200;
-                        alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                        alertText = "<p class='pAlert'>Das angeforderte Datum konnte nicht gefunden werden. Suchen sie ggf. erneut mit einem anderen Datum!</p>";
+                        var alertWidth = 300;
+                        var alertHeight = 150;
+                        var xAlertStart = 650;
+                        var yAlertStart = 200;
+                        var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                        var alertText = "<p class='pAlert'>Das angeforderte Datum konnte nicht gefunden werden. Suchen sie ggf. erneut mit einem anderen Datum!</p>";
                         showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                     </script>
                     <?php

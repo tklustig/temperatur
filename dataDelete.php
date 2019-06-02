@@ -10,9 +10,9 @@
         <meta name="audience" content="alle">				<!-- definiert die Zielgruppe der Website  -->
         <meta name="page-topic" content="Hobby">		<!-- Zuordnungsdefinition für die Suchmaschine -->
         <meta name="revisit-after" CONTENT="7 days">			<!-- definiert den erneuten Besuch des Spiders//hier:nach sieben Tagen  -->
-        <title lang="de">Temperatur Analyse</title> 	<!-- weist dem HTML-Dokument in der Registerkarte einen Namen zu -->     
+        <title lang="de">Temperatur Analyse</title> 	<!-- weist dem HTML-Dokument in der Registerkarte einen Namen zu -->
         <script src="js/menus.js"></script>
-        <script src="js/datetime.js"></script>  
+        <script src="js/datetime.js"></script>
         <script src="js/Alert.js"></script>
         <link href="css/style.css" rel="stylesheet">
     </head>
@@ -99,22 +99,22 @@
                 if (empty($_REQUEST['startId'])) {
                     ?>
                     <script>
-                        alertWidth = 250;
-                        alertHeight = 200;
-                        xAlertStart = 650;
-                        yAlertStart = 200;
-                        alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                        alertText = "<p class='pAlert'>Warum erzeugen Sie unnötigen Traffic?<br>Bitte die Start-Id in die Textbox eingeben!</p>";
+                        var alertWidth = 250;
+                        var alertHeight = 200;
+                        var xAlertStart = 650;
+                        var yAlertStart = 200;
+                        var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                        var alertText = "<p class='pAlert'>Warum erzeugen Sie unnötigen Traffic?<br>Bitte die Start-Id in die Textbox eingeben!</p>";
                         showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                     </script>
                     <?php
                     die();
                 } else {
-                    ?>            
-                    <div id="dropdown2"> 
+                    ?>
+                    <div id="dropdown2">
                         <?= auswahlStepId(1, $_REQUEST['startId'], $_REQUEST['startId'] + 100);
-                        ?>            
-                    </div> 
+                        ?>
+                    </div>
                 </form>
                 <?php
             }
@@ -122,12 +122,12 @@
                 if ($_REQUEST['startId'] > $maxId) {
                     ?>
                     <script>
-                        alertWidth = 250;
-                        alertHeight = 200;
-                        xAlertStart = 650;
-                        yAlertStart = 200;
-                        alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                        alertText = "<p class='pAlert'>Bitte nicht höher als die maximal zulässige Id eingeben.<br> Der Placeholder teilt ihnen mit, bis zu welcher Id Sie löschen können.</p>";
+                        var alertWidth = 250;
+                        var alertHeight = 200;
+                        var xAlertStart = 650;
+                        var yAlertStart = 200;
+                        var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                        var alertText = "<p class='pAlert'>Bitte nicht höher als die maximal zulässige Id eingeben.<br> Der Placeholder teilt ihnen mit, bis zu welcher Id Sie löschen können.</p>";
                         showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                     </script>
                     <?php
@@ -140,12 +140,12 @@
             if (empty($_REQUEST['rad'])) {
                 ?>
                 <script>
-                    alertWidth = 250;
-                    alertHeight = 200;
-                    xAlertStart = 650;
-                    yAlertStart = 200;
-                    alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                    alertText = "<p class='pAlert'>Bitte einen der beiden Radiobuttons aktiveren,<br>um festzulegen, wieviele Records gelöscht werden sollen!</p>";
+                    var alertWidth = 250;
+                    var alertHeight = 200;
+                    var xAlertStart = 650;
+                    var yAlertStart = 200;
+                    var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                    var alertText = "<p class='pAlert'>Bitte einen der beiden Radiobuttons aktiveren,<br>um festzulegen, wieviele Records gelöscht werden sollen!</p>";
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                 </script>
                 <?php
@@ -153,22 +153,43 @@
             } else if ($projectIsOnline) {
                 ?>
                 <script>
-                    alertWidth = 250;
-                    alertHeight = 200;
-                    xAlertStart = 650;
-                    yAlertStart = 200;
-                    alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                    alertText = "<p class='pAlert'>Online ist diese Option nicht verfügbar(s. Beschreibung)</p>";
+                    var alertWidth = 250;
+                    var alertHeight = 200;
+                    var xAlertStart = 650;
+                    var yAlertStart = 200;
+                    var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                    var alertText = "<p class='pAlert'>Online ist diese Option nicht verfügbar(s. Beschreibung)</p>";
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                 </script>
                 <?php
                 die();
             }
             //hier werden Records, abhänging von der RadionButtonwahl(ein einzelner oder mehrere) und ggf. der ID gelöscht
-            if (isset($_REQUEST['anzahlItem']) && $_REQUEST['anzahlItem'] > 1) {
-                $sql = 'DELETE FROM tempwraturs WHERE id=' . $_REQUEST["startId"];
-                $connection->beginTransaction();
-         
+            if (isset($_REQUEST['anzahlItems']) && $_REQUEST['anzahlItems'] > 1) {
+                if ($_REQUEST['rad'] == 'exact') {
+                    $sql = 'DELETE FROM temperaturs WHERE id=' . $_REQUEST["anzahlItems"];
+                    $connection->beginTransaction();
+                    $query2 = $DatabaseObject->Abfragen($connection, $sql);
+                    if ($query2) {
+                        ?>
+                        <script>
+                            var alertWidth = 250;
+                            var alertHeight = 200;
+                            var xAlertStart = 650;
+                            var yAlertStart = 200;
+                            var id = "<?php echo $_REQUEST["anzahlItems"] ?>";
+                            var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                            var alertText = "<p class='pAlert'>Der Record mit der ID:" + id + " wurde gelöscht";
+                            showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                        </script>
+                        <?php
+                    } else {
+                        print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                        die();
+                    }
+                } else if ($_REQUEST['rad'] == 'upTo') {
+                    
+                }
             } else {
                 ?>
                 <script>
