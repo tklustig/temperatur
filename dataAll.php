@@ -164,7 +164,10 @@
         if (isset($_REQUEST['rad'])) {
             if ($_REQUEST['rad'] == 'frontOf') {
                 $dummy = $id;
-                $id += $_REQUEST["anzahlItems"];
+                if ($id <= 18000)
+                    $id += $_REQUEST["anzahlItems"];
+                else
+                    $id += 2 * $_REQUEST["anzahlItems"];
                 if ($id > $maxId) {
                     ?>
                     <script>
@@ -182,7 +185,10 @@
                     file_put_contents($datei, $id);
             } else if ($_REQUEST['rad'] == 'back') {
                 $dummy = $id;
-                $id -= $_REQUEST["anzahlItems"];
+                if ($id <= 18000)
+                    $id -= $_REQUEST["anzahlItems"];
+                else
+                    $id -= 2 * $_REQUEST["anzahlItems"];
                 if ($id < 0) {
                     ?>
                     <script>
