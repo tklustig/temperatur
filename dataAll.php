@@ -117,14 +117,6 @@
     <?php
     $folder = getcwd();
     $datei = $folder . '/txt/dropDownID.txt';
-    require_once 'inc/autoloader.php';
-    spl_autoload_register('classAutoloader');
-    $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
-    $connection = $DatabaseObject->Verbinden();
-    if (!$connection) {
-        print_r("MySQL-Aufbau ist gescheitert!<br>");
-        die();
-    }
     $sql = "SELECT max(id) AS max FROM temperaturs";
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
     if (is_array($query1))

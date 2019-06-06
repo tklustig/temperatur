@@ -47,6 +47,10 @@ class MySQLClass {
         /* Im Zusammenhang mit Transaktionen funktioniert diese Methode nicht (lt. der PHP Manuals:http://de2.php.net/manual/en/pdo.lastinsertid.php */
         return $connection->lastInsertId();
     }
+    
+    public function countRows($connection){
+        return $connection->rowCount();
+    }
 
     public function Transaction($connection) {
         return $connection->beginTransaction();
