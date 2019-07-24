@@ -21,7 +21,6 @@
         <div class="mainDiv">
             <div id="uhr"></div>
         </div>
-        <img src="counter.php" title="Pic1" alt="Picture1">
         <ul>
             <li class="dropdown">
                 <a href="javascript:void(0)" class="treffer_0" onclick="myFunction_0()">Home</a>
@@ -37,6 +36,7 @@
                     <a href="showGraphics.php">Grafik erstellen</a>
                     <a href="dataAll.php">alle Daten abrufen </a>
                     <a href="dataTime.php">bestimmte Daten abrufen </a>
+					<a href="dataAggregate.php">Aggregate abrufen</a>
                 </div>
             </li>
             <li class="dropdown">
@@ -51,8 +51,8 @@
                 alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nKlein - Buchholzer - Kirchweg 25\n30659 Hannover\nMobil:0152/37389041");
             }
         </script>
-    <center><h2>Daten gemäß Datum</h2>
-        <p>Hier können Sie Records löschen. In der Onlineversion verpufft der Request allerdings , da ich nicht möchte, dass von jedem x-beliebigen Vollhorst die Records meiner Datenbank zerstört werden.</p>
+    <center><h2>Daten löschen</h2>
+        <p>Hier können Sie Records löschen. Damit der Request nicht verpufft, muss das Adminpasswort eingegeben werden, da ich nicht möchte, dass von jedem x-beliebigen Vollhorst die Records meiner Datenbank zerstört werden.</p>
     </center>
     <div>
         <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
@@ -60,10 +60,10 @@
                 <?php
                 require_once 'inc/anzeigen.php';
                 ?><?=
-                auswahlStepId(1, 1, 10);
+                auswahlStepId(1, 1, 100);
                 require_once 'inc/autoloader.php';
                 spl_autoload_register('classAutoloader');
-                $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+                $DatabaseObject = new MySQLClass('root', '1918rott', 'mysql', '127.0.0.1', 'temperaturs');
                 $connection = $DatabaseObject->Verbinden();
                 if (!$connection) {
                     print_r("MySQL-Aufbau ist gescheitert!<br>");
@@ -74,7 +74,7 @@
                 if (is_array($query1))
                     $maxId = $query1[0]['max'];
                 else {
-                    print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                    print_r('<br>!!Error!!<br>Datenbankfehler. Abbruch!');
                     foreach ($connection->errorInfo() as $item) {
                         print_r('<br>' . $item);
                     }
@@ -92,11 +92,14 @@
                 <input type="radio" name="rad" id="dummy1" value="exact">genau die Id
                 <br><input type="radio" name="rad" id="dummy2" value="upTo">ab Id
             </div>
+							<label>Passwort</label>
+				<input type="password" name="passwortfeld" size="12" maxlength="12" />
             <?php
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
-                $projectIsOnline = false;
+			$content=file_get_contents("txt/passwordhash.txt");
+            if(!empty($_REQUEST["passwortfeld"])&& $_REQUEST["passwortfeld"]==decodeRand($content))
+                $recordMayNotBeDeleted = false;
             else
-                $projectIsOnline = true;
+                $recordMayNotBeDeleted = true;
             //Alle Eventualitäten nach dem DropDown-Request verarbeiten
             if (!empty($_REQUEST['submit2'])) {
                 if (empty($_REQUEST['startId'])) {
@@ -112,15 +115,7 @@
                     </script>
                     <?php
                     die();
-                } else {
-                    ?>
-                    <div id="dropdown2">
-                        <?= auswahlStepId(1, $_REQUEST['startId'], $_REQUEST['startId'] + 100);
-                        ?>
-                    </div>
-                </form>
-                <?php
-            }
+                }
             if (!empty($_REQUEST['startId'])) {
                 if ($_REQUEST['startId'] > $maxId) {
                     ?>
@@ -130,12 +125,20 @@
                         var xAlertStart = 650;
                         var yAlertStart = 200;
                         var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                        var alertText = "<p class='pAlert'>Bitte nicht höher als die maximal zulässige Id eingeben.<br> Der Placeholder teilt ihnen mit, bis zu welcher Id Sie löschen können.</p>";
+                        var alertText = "<p class='pAlert'>Bitte nicht höher als die maximal zulässige Id eingeben.<br> Der Placeholder teilt Ihnen mit, bis zu welcher Id Sie löschen können.</p>";
                         showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                     </script>
-                    <?php
-                }
-                die();
+					 <?php
+					 die();
+                }else{
+					           ?>
+                    <div id="dropdown2">
+                        <?= auswahlStepId(1, $_REQUEST['startId'], $_REQUEST['startId'] + 100);
+                        ?>
+                    </div>
+					 <?php
+				}
+            
             }
         }
         //Alle Eventualitäten nach dem Submit-Request verarbeiten
@@ -153,7 +156,7 @@
                 </script>
                 <?php
                 die();
-            } else if ($projectIsOnline) {
+            } else if ($recordMayNotBeDeleted) {
                 ?>
                 <script>
                     var alertWidth = 250;
@@ -161,7 +164,7 @@
                     var xAlertStart = 650;
                     var yAlertStart = 200;
                     var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
-                    var alertText = "<p class='pAlert'>Online ist diese Option nicht verfügbar(s. Beschreibung)</p>";
+                    var alertText = "<p class='pAlert'>Das Passwort ist inkorrekt. Der Record wird nicht gelöscht!</p>";
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                 </script>
                 <?php
@@ -198,7 +201,7 @@
                                 var xAlertStart = 650;
                                 var yAlertStart = 200;
                                 var id = "<?php echo $_REQUEST["anzahlItems"] ?>";
-                                var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                                var alertTitle = "<p class='pTitle'><b>! Info !</b></p>";
                                 var alertText = "<p class='pAlert'>Der Record mit der ID:" + id + " wurde gelöscht";
                                 showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                             </script>
@@ -211,14 +214,14 @@
                                 var xAlertStart = 650;
                                 var yAlertStart = 200;
                                 var id = "<?php echo $_REQUEST["anzahlItems"] ?>";
-                                var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                                var alertTitle = "<p class='pTitle'><b>! Info !</b></p>";
                                 var alertText = "<p class='pAlert'>Alle Record ab der ID:" + id + " wurden gelöscht";
                                 showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
                             </script>
                             <?php
                         }
                     } else {
-                        print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                        print_r('<br>!!Error!!<br>Datenbankfehler. Abbruch!');
                         foreach ($connection->errorInfo() as $item) {
                             print_r('<br>' . $item);
                         }
@@ -241,4 +244,16 @@
             }
         }
         ?>
-
+<?php
+function decodeRand($str, $seed=1234567) {
+	mt_srand($seed);
+    $blocks = explode('-', $str);
+    $out = array();
+    foreach ($blocks as $block) {
+		$ord = (intval($block) - mt_rand(350, 16000)) / 3;
+		$out[] = chr($ord);
+    }     
+    mt_srand();
+return implode('', $out);
+}
+?>
