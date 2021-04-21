@@ -46,21 +46,19 @@
         </ul>
         <script>
             function impressum() {
-                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nKlein - Buchholzer - Kirchweg 25\n30659 Hannover\nMobil:0152/37389041");
+                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nDebberoder Str.61\n30659 Hannover\nMobil:0152/37301327");
             }
         </script>
     <center><h2>Doppelte Einträge entfernen</h2>
         <p>Diese Seite löscht alle doppelten Einträge in der Datenbank. Dazu betätigen Sie bitte den Submitbutton.</p></center>
     <?php
-    require_once 'inc/autoloader.php';
-    spl_autoload_register('classAutoloader');
-    $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+    require_once 'inc/connect.php';
     $connection = $DatabaseObject->Verbinden();
     if (!$connection) {
         print_r("MySQL-Aufbau ist gescheitert!<br>");
         die();
     }
-    $sql = "SELECT id,uhrzeit FROM temperaturs WHERE id>48284;";
+    $sql = "SELECT id,uhrzeit FROM temperaturs WHERE id>1;";
     $query1 = $DatabaseObject->Abfragen($connection, $sql);
     for ($i = 0; $i < count($query1) - 1; $i++) {
         if ($query1[$i]['uhrzeit'] == $query1[$i + 1]['uhrzeit']) {
@@ -79,36 +77,39 @@
             <input class="button2" type="submit" name="submit0" value="Submit">
         </center>
     </form>
-    <?php
-    if (empty($StartIdForDeleting) || $StartIdForDeleting == null) {
-        ?> 
-        <center><p>Es wurden keine doppelten Einträge gefunden.</p>
-            <?php
-        }
-        if (!empty($_REQUEST['submit0'])) {
-            if (!empty($StartIdForDeleting) && $StartIdForDeleting != null) {
-                $sql = "DELETE FROM temperaturs WHERE MOD(id,2)=1 AND id>=$StartIdForDeleting;";
-                $query1 = $DatabaseObject->Abfragen($connection, $sql);
-                if (!is_array($query1) && $query1) {
-                    ?> 
-                    <center><p class="pSpecial">Alle doppelten Einträge ab Id: <?= $StartIdForDeleting ?> wurden aus der Datenbank entfernt!</p>
-                        <?php
-                    } else {
-                        print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
-                        foreach ($connection->errorInfo() as $item) {
-                            print_r('<br>' . $item);
-                        }
-                        die();
-                    }
-                } else {
-                    ?>
-                    <center><p class="pSpecial">Da keine doppelten Einträge gefunden wurden, bleibt der Request wirkungslos.</p>  
-                        <?php
-                    }
+</body>
+</html>
+<?php
+if (empty($StartIdForDeleting) || $StartIdForDeleting == null)
+    echo('<center><p>Es wurden keine doppelten Einträge gefunden.</p>');
+if (!empty($_REQUEST['submit0'])) {
+    if (!empty($StartIdForDeleting) && $StartIdForDeleting != null) {
+        //$sql = "DELETE FROM temperaturs WHERE MOD(id,2)=1 AND id>=$StartIdForDeleting;";
+        $sql1 = "DELETE FROM temperaturs WHERE id=$StartIdForDeleting";
+        $sql2 = 'ALTER TABLE temperaturs AUTO_INCREMENT = 1;';
+        $query1 = $DatabaseObject->Abfragen($connection, $sql1);
+        $query2 = $DatabaseObject->Abfragen($connection, $sql2);
+        if (!is_array($query1) && $query1 && $query2) {
+            ?> 
+            <center><p class="pSpecial">Alle doppelten Einträge der Id: <?= $StartIdForDeleting ?> wurden aus der Datenbank entfernt!</p>
+                <?php
+            } else {
+                print_r('!!Error!!<br>Datenbankfehler. Abbruch!');
+                foreach ($connection->errorInfo() as $item) {
+                    print_r('<br>' . $item);
                 }
-                ?>
-                </body>
-                </html>
+                die();
+            }
+        } else {
+            ?>
+            <center><p class="pSpecial">Da keine doppelten Einträge gefunden wurden, bleibt der Request wirkungslos.</p>  
+                <?php
+            }
+        }
+
+        if ($DatabaseObject != null)
+            $DatabaseObject->closeConnection($connection);
+        ?>
 
 
 

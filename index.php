@@ -47,7 +47,7 @@
         </ul>
         <script>
             function impressum() {
-                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nKlein - Buchholzer - Kirchweg 25\n30659 Hannover\nMobil:0152/37389041");
+                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nDebberoder Str.61\n30659 Hannover\nMobil:0152/37301327");
             }
         </script>
         <audio id="sound" controls src="https://wiki.selfhtml.org/local/Europahymne.mp3" type="audio/mp3"></audio> 
@@ -74,9 +74,7 @@
             <li>Da der CronJob doppelt aufgerufen wird, sollten die Werte über den Adminberich bereinigt werden! Im Adminbereich können Werte auch gelöscht werden.</li>
         </ol>
         <?php
-        require_once 'inc/autoloader.php';
-        spl_autoload_register('classAutoloader');
-        $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+        require_once 'inc/connect.php';
         $connection = $DatabaseObject->Verbinden();
         if (!$connection) {
             print_r("MySQL-Aufbau ist gescheitert!<br>");
@@ -90,3 +88,7 @@
         </div></center>
 </body>
 </html>
+<?php
+if ($DatabaseObject != null)
+    $DatabaseObject->closeConnection($connection);
+?>

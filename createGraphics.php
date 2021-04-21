@@ -2,10 +2,28 @@
 
 session_start();
 /* Damit die Bilderzeugung funktioniert, darf keine PHP Datei eingebunden werden. Deshalb muss der Autoloader aus dem Script geladen werden.
-  Auch die Errormeldungen können nicht eingebunden werden, sondern müssen an Ort und Stelle codiert werden.
+  Auch die Errormeldungen können nicht eingebunden werden, sondern müssen an Ort und Stelle codiert werden. Desweiteren müssen im Ordner
+  .\Temperatur\inc\graphicsLibrary\fonts\*.* die beiden trueType-Schriften arial.ttf und DejaVuSans.ttf vorhanden sein, da die Library ansonsten auf nicht
+  zugreifbare Ordner zugreift
  */
 spl_autoload_register('classAutoloader');
-$DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+define('prefix', 'k158364_');
+define('OPS', 'WINNT');
+if (PHP_OS == OPS) {
+    $username = 'root';
+    $server = 'localhost';
+    $password = '';
+    $database = 'createrecords';
+    //DatenbankErzeugen($dsn, $username, $password);
+    //dieser else-Zweig kann dekommentiert werden, sofern auch für LINUX eine Datenbank angelegt werden soll. Dazu werden allerdings die Parameter benötigt
+} else {
+    $username = "k158364_kipp"; //für LINUX muss hier der Benutzer...
+    $server = 'mysql2efb.netcup.net';
+    $password = "1918Rott$"; //und hier das Passwort angegegeben werden
+    $database = prefix . 'tklustig';
+    //DatenbankErzeugen($dsn, $username, $password);
+}
+$DatabaseObject = new MySQLClass($username, $password, 'mysql', $server, $database);
 $connection = $DatabaseObject->Verbinden();
 if (!$connection) {
     print_r("MySQL-Aufbau ist gescheitert!<br>");
@@ -27,10 +45,11 @@ for ($i = 0; $i < count($query1); $i++) {
     $record = $query1[$i]['Temperatur_Celsius'];
     array_push($temperaturA, $record);
     $record = $query1[$i]['uhrzeit'];
-    if (strpos($record, '0') == 0)
+    if (strpos($record, '0') === 0)
         $record = substr($record, 1);
-    //$record = '"' . $record . '"';
-    //$record = $record;
+    if (strlen($record) > 5) {
+        $record = substr($record, 0, -3);
+    }
     array_push($uhrzeitA, $record);
     array_push($datumA, $query1[$i]['datum']);
     $record = $query1[$i]['Luftfeuchtigkeit_Prozent'];

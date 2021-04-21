@@ -68,7 +68,7 @@
         </ul>
         <script>
             function impressum() {
-                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nKlein - Buchholzer - Kirchweg 25\n30659 Hannover\nMobil:0152/37389041");
+                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nDebberoder Str.61\n30659 Hannover\nMobil:0152/37301327");
             }
         </script>
     <center><h2>Daten gemäß Datum</h2>
@@ -113,14 +113,12 @@
                 //iteriere über das Array und setze den Datumstring so zusammen, dass die Datenbank ihn erkennt
                 for ($i = 0; $i < count($arrayOfDate); $i++) {
                     if ($i != count($arrayOfDate) - 1)
-                        $strDatum .= $arrayOfDate[$i] . '.';
+                        $strDatum .= $arrayOfDate[count($arrayOfDate) - $i - 1] . '-';
                     else
-                        $strDatum .= $arrayOfDate[$i];
+                        $strDatum .= $arrayOfDate[0];
                 }
                 //jetzt enthalt die Variable strDatum das Datum so, wie ihn die Datenbank mitunter enthält. Initialisere Datenbankabfrage
-                require_once 'inc/autoloader.php';
-                spl_autoload_register('classAutoloader');
-                $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+                require_once 'inc/connect.php';
                 $connection = $DatabaseObject->Verbinden();
                 if (!$connection) {
                     print_r("MySQL-Aufbau ist gescheitert!<br>");
@@ -171,6 +169,9 @@
                     }
                 }
             }
+            if ($DatabaseObject != null)
+                $DatabaseObject->closeConnection($connection);
         }
         ?>
+
 

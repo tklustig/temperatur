@@ -50,7 +50,7 @@
         </ul>
         <script>
             function impressum() {
-                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nKlein - Buchholzer - Kirchweg 25\n30659 Hannover\nMobil:0152/37389041");
+                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nDebberoder Str.61\n30659 Hannover\nMobil:0152/37301327");
             }
         </script>
     <center><h2>Daten ohne Filter</h2></center>
@@ -65,9 +65,7 @@
             </div>
             <div id="textbox1">
                 <?php
-                require_once 'inc/autoloader.php';
-                spl_autoload_register('classAutoloader');
-                $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+                require_once 'inc/connect.php';
                 $connection = $DatabaseObject->Verbinden();
                 if (!$connection) {
                     print_r("MySQL-Aufbau ist gescheitert!<br>");
@@ -207,7 +205,7 @@
                     file_put_contents($datei, $id);
             }
         } else
-            print_r('!!ERROR!! Abbruch');
+            echo('<p><font color="red">!!ERROR!! Bitte einer der Radio-Buttons aktivieren</p></font>');
     } else {
         if (file_exists($datei))
             unlink($folder . '/txt/dropDownID.txt');
@@ -228,5 +226,9 @@
         }
         die();
     }
+    ?>
+    <?php
+    if ($DatabaseObject != null)
+        $DatabaseObject->closeConnection($connection);
     ?>
 

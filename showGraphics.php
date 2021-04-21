@@ -70,38 +70,50 @@ session_start();
         </ul>
         <script>
             function impressum() {
-                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nKlein - Buchholzer - Kirchweg 25\n30659 Hannover\nMobil:0152/37389041");
+                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nDebberoder Str.61\n30659 Hannover\nMobil:0152/37301327");
             }
         </script>
     <center><h1>Schaubilder</h1>
         <p class="pSpecialo">Graphische Darstellung der Temperatur-und Luftfeuchtigkeitswerte</p>
     </center>
     <?php
+    require_once 'inc/connect.php';
+    $connection = $DatabaseObject->Verbinden();
+    if (!$connection) {
+        print_r("MySQL-Aufbau ist gescheitert!<br>");
+        die();
+    }
+    $sql = "SELECT max(id) AS max,min(id) AS min FROM temperaturs;";
+    $query1 = $DatabaseObject->Abfragen($connection, $sql);
+    if (is_array($query1)) {
+        $valueMax = $query1[0]['max'];
+        $valueMin = $query1[0]['min'];
+        $DatabaseObject->closeConnection($connection);
+    } else {
+        print_r("Fehler bei der Datenbankabfrage!");
+        die();
+    }
     if (isset($_GET['query'])) {
-        if ($_GET['query'] == 1) {
+        if ($_GET['query'] == 1 && isset($_SESSION['pk'])) {
             $_SESSION['pk'] -= 2;
-        } else if ($_GET['query'] == 2) {
-            $_SESSION['pk'] += 2;
-        } else if ($_GET['query'] == 3) {
-            require_once 'inc/autoloader.php';
-            spl_autoload_register('classAutoloader');
-            $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
-            $connection = $DatabaseObject->Verbinden();
-            if (!$connection) {
-                print_r("MySQL-Aufbau ist gescheitert!<br>");
-                die();
-            }
-            $sql = "SELECT max(id) AS max,min(id) AS min FROM temperaturs;";
-            $query1 = $DatabaseObject->Abfragen($connection, $sql);
-            if (is_array($query1)) {
-                $valueMax = $query1[0]['max'];
-                $valueMin = $query1[0]['min'];
-            } else {
-                print_r("Fehler bei der Datenbankabfrage!");
-                die();
-            }
-            $_SESSION['pk'] = random_int($valueMin, $valueMax);
-        }
+        } else if ($_GET['query'] == 2 && isset($_SESSION['pk'])) {
+            //+11, da 10 Werte angezeigt werden
+            if ($_SESSION['pk'] + 11 >= $valueMax) {
+                ?>
+                <script>
+                    var alertWidth = 250;
+                    var alertHeight = 200;
+                    var xAlertStart = 650;
+                    var yAlertStart = 200;
+                    var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
+                    var alertText = "<p class='pAlert'>Sie befinden sich am oberen Ende der Meßwerte.<br>Bitte reduzieren, anstatt erhöhen!</p>";
+                    showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
+                </script>
+                <?php
+            } else
+                $_SESSION['pk'] += 2;
+        } else if ($_GET['query'] == 3 && isset($_SESSION['pk']))
+            $_SESSION['pk'] = mt_rand($valueMin, $valueMax);
     }
     if (isset($_SESSION['pk']) && $_SESSION['pk'] < 0) {
         ?>
@@ -168,20 +180,18 @@ if (!empty($_REQUEST['submit0'])) {
 } else if (!empty($_REQUEST['submit1'])) {
     //das Datumfeld ist nicht leer?
     if (!empty($_REQUEST['date0'])) {
-        $strDatum = "";
+        $strDatum = '';
         //splitte das Datumfeld anhand des Trenners(-) in ein Array
         $arrayOfDate = explode('-', $_REQUEST['date0']);
         //iteriere über das Array und setze den Datumstring so zusammen, dass die Datenbank ihn erkennt
         for ($i = 0; $i < count($arrayOfDate); $i++) {
             if ($i != count($arrayOfDate) - 1)
-                $strDatum .= $arrayOfDate[$i] . '.';
+                $strDatum .= $arrayOfDate[count($arrayOfDate) - $i - 1] . '-';
             else
-                $strDatum .= $arrayOfDate[$i];
+                $strDatum .= $arrayOfDate[0];
         }
         //jetzt enthalt die Variable strDatum das Datum so, wie ihn die Datenbank mitunter enthält. Initialisere Datenbankabfrage
-        require_once 'inc/autoloader.php';
-        spl_autoload_register('classAutoloader');
-        $DatabaseObject = new MySQLClass('root', '', 'mysql', '192.168.1.10', 'temperatur');
+        require_once 'inc/connect.php';
         $connection = $DatabaseObject->Verbinden();
         if (!$connection) {
             print_r("MySQL-Aufbau ist gescheitert!<br>");
@@ -196,16 +206,16 @@ if (!empty($_REQUEST['submit0'])) {
                 if ($strDatum == $query1[$i]['datum']) {
                     $_SESSION['pk'] = $query1[$i]['id'];
                     break;
-                    //andernfalls setze die Session auf 1
+                    //andernfalls setze die Session auf -1
                 } else
-                    $_SESSION['pk'] = 1;
+                    $_SESSION['pk'] = -1;
             }
         } else {
             print_r("Fehler bei der Datenbankabfrage!");
             die();
         }
         //Sofern der Wert nicht gefunden wurde, benachrichtige den User
-        if ($_SESSION['pk'] == 1) {
+        if ($_SESSION['pk'] == -1) {
             ?>
             <script>
                 var alertWidth = 300;
@@ -233,4 +243,8 @@ if (!empty($_REQUEST['submit0'])) {
         <?php
     }
 }
+?>
+<?php
+if ($DatabaseObject != null)
+    $DatabaseObject->closeConnection($connection);
 ?>
