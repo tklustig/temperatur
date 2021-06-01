@@ -103,8 +103,8 @@ session_start();
                 <script>
                     var alertWidth = 250;
                     var alertHeight = 200;
-                    var xAlertStart = 650;
-                    var yAlertStart = 200;
+                    var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+                    var yAlertStart = window.screen.availHeight / 2 - alertHeight;
                     var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
                     var alertText = "<p class='pAlert'>Sie befinden sich am oberen Ende der Meßwerte.<br>Bitte reduzieren, anstatt erhöhen!</p>";
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
@@ -115,13 +115,13 @@ session_start();
         } else if ($_GET['query'] == 3 && isset($_SESSION['pk']))
             $_SESSION['pk'] = mt_rand($valueMin, $valueMax);
     }
-    if (isset($_SESSION['pk']) && $_SESSION['pk'] < 0) {
+    if (isset($_SESSION['pk']) && $_SESSION['pk'] < 0 && $_SESSION['pk'] != -2) {
         ?>
         <script>
             var alertWidth = 250;
             var alertHeight = 200;
-            var xAlertStart = 650;
-            var yAlertStart = 200;
+            var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+            var yAlertStart = window.screen.availHeight / 2 - alertHeight;
             var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
             var alertText = "<p class='pAlert'>Sie befinden sich am unteren Ende der Meßwerte.<br>Bitte erhöhen, anstatt reduzieren!</p>";
             showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
@@ -169,8 +169,8 @@ if (!empty($_REQUEST['submit0'])) {
     <script>
         var alertWidth = 300;
         var alertHeight = 150;
-        var xAlertStart = 650;
-        var yAlertStart = 200;
+        var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+        var yAlertStart = window.screen.availHeight / 2 - alertHeight;
         var alertTitle = "<p class='pTitle'><b>! Information !</b></p>";
         var alertText = "<p class='pAlert'>Sie befinden sich jetzt am unteren Ende der Meßwerte!</p>";
         showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
@@ -207,21 +207,22 @@ if (!empty($_REQUEST['submit0'])) {
                     $_SESSION['pk'] = $query1[$i]['id'];
                     break;
                     //andernfalls setze die Session auf -1
-                } else
-                    $_SESSION['pk'] = -1;
+                } else {
+                    $_SESSION['pk'] = -2;
+                }
             }
         } else {
             print_r("Fehler bei der Datenbankabfrage!");
             die();
         }
         //Sofern der Wert nicht gefunden wurde, benachrichtige den User
-        if ($_SESSION['pk'] == -1) {
+        if ($_SESSION['pk'] == -2) {
             ?>
             <script>
                 var alertWidth = 300;
                 var alertHeight = 150;
-                var xAlertStart = 650;
-                var yAlertStart = 200;
+                var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+                var yAlertStart = window.screen.availHeight / 2 - alertHeight;
                 var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
                 var alertText = "<p class='pAlert'>Das angeforderte Datum konnte nicht gefunden werden. Suchen sie ggf. erneut mit einem anderen Datum!</p>";
                 showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
@@ -234,8 +235,8 @@ if (!empty($_REQUEST['submit0'])) {
         <script>
             var alertWidth = 300;
             var alertHeight = 150;
-            var xAlertStart = 650;
-            var yAlertStart = 200;
+            var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+            var yAlertStart = window.screen.availHeight / 2 - alertHeight;
             var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
             var alertText = "<p class='pAlert'>Bitte wählen Sie über das Kalendersymbol ein Datum aus, bevor Sie das nächste mal einen Request abfeuern!</p>";
             showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);

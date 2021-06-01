@@ -134,8 +134,8 @@
                 <script>
                     var alertWidth = 250;
                     var alertHeight = 200;
-                    var xAlertStart = 650;
-                    var yAlertStart = 200;
+                    var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+                    var yAlertStart = window.screen.availHeight / 2 - alertHeight;
                     var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
                     var alertText = "<p class='pAlert'>Nur Zahlen werden bzgl. der Primärschlüsselabfrage akzeptiert!</p>";
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
@@ -172,8 +172,8 @@
                     <script>
                         var alertWidth = 250;
                         var alertHeight = 200;
-                        var xAlertStart = 650;
-                        var yAlertStart = 200;
+                        var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+                        var yAlertStart = window.screen.availHeight / 2 - alertHeight;
                         var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
                         var alertText = "<p class='pAlert'>Sie befinden sich am oberen Ende der Meßwerte.<br>Bitte reduzieren, anstatt erhöhen!</p>";
                         showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
@@ -193,8 +193,8 @@
                     <script>
                         var alertWidth = 250;
                         var alertHeight = 200;
-                        var xAlertStart = 650;
-                        var yAlertStart = 200;
+                        var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+                        var yAlertStart = window.screen.availHeight / 2 - alertHeight;
                         var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
                         var alertText = "<p class='pAlert'>Sie befinden sich am unteren Ende der Meßwerte.<br>Bitte erhöhen, anstatt reduzieren!</p>";
                         showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);

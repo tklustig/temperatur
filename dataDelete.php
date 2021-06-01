@@ -110,8 +110,8 @@
                 <script>
                     var alertWidth = 250;
                     var alertHeight = 200;
-                    var xAlertStart = 650;
-                    var yAlertStart = 200;
+                    var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+                    var yAlertStart = window.screen.availHeight / 2 - alertHeight;
                     var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
                     var alertText = "<p class='pAlert'>Warum erzeugen Sie unnötigen Traffic?<br>Bitte die Start-Id in die Textbox eingeben!</p>";
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
@@ -125,8 +125,8 @@
                     <script>
                         var alertWidth = 250;
                         var alertHeight = 200;
-                        var xAlertStart = 650;
-                        var yAlertStart = 200;
+                        var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+                        var yAlertStart = window.screen.availHeight / 2 - alertHeight;
                         var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
                         var alertText = "<p class='pAlert'>Bitte nicht höher als die maximal zulässige Id eingeben.<br> Der Placeholder teilt Ihnen mit, bis zu welcher Id Sie löschen können.</p>";
                         showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
@@ -150,8 +150,8 @@
                 <script>
                     var alertWidth = 250;
                     var alertHeight = 200;
-                    var xAlertStart = 650;
-                    var yAlertStart = 200;
+                    var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+                    var yAlertStart = window.screen.availHeight / 2 - alertHeight;
                     var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
                     var alertText = "<p class='pAlert'>Bitte einen der beiden Radiobuttons aktiveren,<br>um festzulegen, wieviele Records gelöscht werden sollen!</p>";
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
@@ -163,8 +163,8 @@
                 <script>
                     var alertWidth = 250;
                     var alertHeight = 200;
-                    var xAlertStart = 650;
-                    var yAlertStart = 200;
+                    var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+                    var yAlertStart = window.screen.availHeight / 2 - alertHeight;
                     var alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
                     var alertText = "<p class='pAlert'>Das Passwort ist inkorrekt. Der Record wird nicht gelöscht!</p>";
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
@@ -200,8 +200,8 @@
                             <script>
                                 var alertWidth = 250;
                                 var alertHeight = 200;
-                                var xAlertStart = 650;
-                                var yAlertStart = 200;
+                                var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+                                var yAlertStart = window.screen.availHeight / 2 - alertHeight;
                                 var id = "<?php echo $_REQUEST["anzahlItems"] ?>";
                                 var alertTitle = "<p class='pTitle'><b>! Info !</b></p>";
                                 var alertText = "<p class='pAlert'>Der Record mit der ID:" + id + " wurde gelöscht";
@@ -213,8 +213,8 @@
                             <script>
                                 var alertWidth = 250;
                                 var alertHeight = 200;
-                                var xAlertStart = 650;
-                                var yAlertStart = 200;
+                                var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+                                var yAlertStart = window.screen.availHeight / 2 - alertHeight;
                                 var id = "<?php echo $_REQUEST["anzahlItems"] ?>";
                                 var alertTitle = "<p class='pTitle'><b>! Info !</b></p>";
                                 var alertText = "<p class='pAlert'>Alle Record ab der ID:" + id + " wurden gelöscht";
@@ -235,8 +235,8 @@
                 <script>
                     alertWidth = 250;
                     alertHeight = 200;
-                    xAlertStart = 650;
-                    yAlertStart = 200;
+                    var xAlertStart = window.screen.availWidth / 2 - alertWidth;
+                    var yAlertStart = window.screen.availHeight / 2 - alertHeight;
                     alertTitle = "<p class='pTitle'><b>! Warnung !</b></p>";
                     alertText = "<p class='pAlert'>Bitte einen Wert aus der DropDownbox größer als eins und kleiner als Maximal wählen.</p>";
                     showAlert(alertWidth, alertHeight, xAlertStart, yAlertStart, alertTitle, alertText);
