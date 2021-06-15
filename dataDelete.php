@@ -36,7 +36,7 @@
                     <a href="showGraphics.php">Grafik erstellen</a>
                     <a href="dataAll.php">alle Daten abrufen </a>
                     <a href="dataTime.php">bestimmte Daten abrufen </a>
-                    <a href="dataAggregate.php">Aggregate abrufen</a>
+                 <!--     <a href="dataAggregate.php">Aggregate abrufen</a>-->
                 </div>
             </li>
             <li class="dropdown">
