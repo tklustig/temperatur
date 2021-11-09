@@ -6,7 +6,7 @@ if (PHP_OS == OPS) {
     $username = 'root';
     $server = 'localhost';
     $password = '';
-    $database = 'createrecords';
+    $database = 'temperaturs';
     //DatenbankErzeugen($dsn, $username, $password);
     //dieser else-Zweig kann dekommentiert werden, sofern auch für LINUX eine Datenbank angelegt werden soll. Dazu werden allerdings die Parameter benötigt
 } else {
