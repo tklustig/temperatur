@@ -47,7 +47,7 @@
         </ul>
         <script>
             function impressum() {
-                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nDebberoder Str.61\n30659 Hannover\nMobil:0152/37301327");
+                alert("Programmierer &  V.i.S.d.P: Thomas Kipp\nAnschrift:\nRockwinkleler Landstr.110\n28125 Bremen\nMobil:0152/015214013523");
             }
         </script>
         <audio id="sound" controls src="https://wiki.selfhtml.org/local/Europahymne.mp3" type="audio/mp3"></audio> 

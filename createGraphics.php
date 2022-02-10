@@ -19,7 +19,7 @@ if (PHP_OS == OPS) {
 } else {
     $username = "k158364_kipp"; //für LINUX muss hier der Benutzer...
     $server = 'mysql2efb.netcup.net';
-    $password = "1918Rott$"; //und hier das Passwort angegegeben werden
+    $password = "xyz"; //und hier das Passwort angegegeben werden
     $database = prefix . 'tklustig';
     //DatenbankErzeugen($dsn, $username, $password);
 }

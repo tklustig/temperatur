@@ -99,7 +99,6 @@
         if (!empty($_REQUEST['passwortfeld']))
             $erg = $encoding == $_REQUEST["passwortfeld"] ? TRUE : FALSE;
         if (!empty($_REQUEST["passwortfeld"]) && $_REQUEST["passwortfeld"] == $encoding)
-        //if (!empty($_REQUEST["passwortfeld"]) && password_verify('1918rott', $content))
             $recordMayNotBeDeleted = false;
         else
             $recordMayNotBeDeleted = true;
